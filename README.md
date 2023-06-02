@@ -3,7 +3,7 @@
 
 It acts as an interface between client and the scheduling services provided, allowing users to interact for consultation with specialists. It also provides the info of availability and unavailability of specialists, retrieving available slots for specialists, booking and cancelling slots, and fetching day views of specialists for a particular specialization.
 
-## Features
+### Features
 * Handles various requests for scheduling/booking/cancelling slots
 * Provides slots availability
 * provides specialists availability of any day
