@@ -28,5 +28,9 @@ nbdist/
 config.service.ts
 config.json
 
-
+# Additional entries
+.mvn
+.tern-project
+mvnw
+mvnw.cmd
 
