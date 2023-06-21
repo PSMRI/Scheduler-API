@@ -41,17 +41,16 @@ public class SpecialistServiceImpl implements SpecialistService {
 
 	@Override
 	public List<Specialization> getspecialization() {
-		// TODO Auto-generated method stub
+		
 		return specializationRepo.findByDeleted(false);
 	}
 
 	@Override
 	public List<Specialist> getspecialistUser(Long providerservicemapID, Long specializationID, Long userID)
 			throws TMException {
-		// TODO Auto-generated method stub
+		
 		// List<Object[]>
 		// obj=specializationRepo.getspecialist(providerservicemapID,
-		// specializationID);
 
 		Long parkingplaceID = specializationRepo.getPPID(providerservicemapID, userID);
 		if (parkingplaceID == null) {
@@ -88,13 +87,12 @@ public class SpecialistServiceImpl implements SpecialistService {
 
 	@Override
 	public M_User getinfo(Long userID) {
-		// TODO Auto-generated method stub
+		
 		M_User user = new M_User();
 		Object[] objlist = specializationRepo.getspecialistinfo(userID);
-//		System.out.println(obj);
+
 		if (objlist != null && objlist.length > 0) {
 			Object[] obj = (Object[]) objlist[0];
-//			user.setUserID(new Long(obj[0].toString()) );
 			user.setUserID(Long.valueOf((Integer) obj[0]));
 			user.setTitleName((String) obj[1]);
 			user.setFirstName((String) obj[2]);

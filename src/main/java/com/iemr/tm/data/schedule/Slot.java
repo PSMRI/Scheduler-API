@@ -59,7 +59,7 @@ public class Slot {
 	}
 
 	public Slot(int i, Integer size, String slot,String actual,String booked) {
-		// TODO Auto-generated constructor stub
+		
 		fromTime=LocalTime.ofSecondOfDay(i*5*60L); 
 		Integer y=(i+size)*5*60;
 		if(y>=86400){
@@ -78,7 +78,7 @@ public class Slot {
 	}
 
 	public Slot(int start, int end, String group) {
-		// TODO Auto-generated constructor stub
+		
 		fromTime=LocalTime.ofSecondOfDay(start*5*60L); 
 		Integer y=end*5*60;
 		if(y>=86400){

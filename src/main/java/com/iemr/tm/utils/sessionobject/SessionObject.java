@@ -35,17 +35,7 @@ import com.iemr.tm.utils.redis.RedisStorage;
 public class SessionObject
 {
 
-	// //
-	// @Autowired(required = true)
-	// // @Required
-	// public void setConfigProperties(ConfigProperties configProperties)
-	// {
-	// // if (configProperties == null)
-	// // {
-	// // configProperties = new ConfigProperties();
-	// // }
-	// this.configProperties = configProperties;
-	// }
+
 
 	private RedisStorage objectStore;
 
@@ -53,34 +43,28 @@ public class SessionObject
 	// @Required
 	public void setObjectStore(RedisStorage objectStore)
 	{
-		// if (objectStore == null)
-		// {
-		// objectStore = new RedisStorage();
-		// }
+		
+	
 		this.objectStore = objectStore;
 	}
 
 	public SessionObject()
 	{
-		// configProperties = new ConfigProperties();
-		// objectStore = new RedisStorage();
-		// if (objectStore == null)
-		// {
-		// objectStore = new RedisStorage();
-		// }
+		
+		
 		extendExpirationTime = ConfigProperties.getExtendExpiryTime();
 		sessionExpiryTime = ConfigProperties.getSessionExpiryTime();
 	}
 
-	private boolean extendExpirationTime;// =
-											// configProperties.getExtendExpiryTime();
-	private int sessionExpiryTime;// = configProperties.getSessionExpiryTime();
+	private boolean extendExpirationTime;
+											
+	private int sessionExpiryTime;
 
 	public String getSessionObject(String key) throws RedisSessionException
 	{
 		Boolean extendExpirationTime = ConfigProperties.getExtendExpiryTime();
 		Integer sessionExpiryTime = ConfigProperties.getSessionExpiryTime();
-		// RedisStorage objectStore = new RedisStorage();
+		
 		return objectStore.getObject(key, extendExpirationTime, sessionExpiryTime);
 	}
 
@@ -94,7 +78,7 @@ public class SessionObject
 	{
 		Boolean extendExpirationTime = ConfigProperties.getExtendExpiryTime();
 		Integer sessionExpiryTime = ConfigProperties.getSessionExpiryTime();
-		// RedisStorage objectStore = new RedisStorage();
+		
 		updateConcurrentSessionObject(key, value, extendExpirationTime, sessionExpiryTime);
 		return objectStore.updateObject(key, value, extendExpirationTime, sessionExpiryTime);
 	}
@@ -115,28 +99,7 @@ public class SessionObject
 	}
 	public void deleteSessionObject(String key) throws RedisSessionException
 	{
-		// RedisStorage objectStore = new RedisStorage();
+		
 		System.out.println(objectStore.deleteObject(key));
 	}
-
-	// public static void test(String[] args)
-	// {
-	// SessionObject obj = new SessionObject();
-	// JSONObject testdata = new JSONObject();
-	// try
-	// {
-	// System.out.println("Set Object " + obj.getSessionObject("test1234"));
-	// System.out.println("Set Object " + obj.setSessionObject("test1234", testdata.toString()));
-	// System.out.println("Set Object " + obj.getSessionObject("test1234"));
-	// testdata.put("userName", "test");
-	// // testdata.put("validity", obj.sessionExpiryTime);
-	// System.out.println("Set Object " + obj.updateSessionObject("test1234", testdata.toString()));
-	// System.out.println("Set Object " + obj.getSessionObject("test1234"));
-	// obj.deleteSessionObject("test1234");
-	// System.out.println("Set Object " + obj.getSessionObject("test1234"));
-	// } catch (RedisSessionException | JSONException e)
-	// {
-	// e.printStackTrace();
-	// }
-	// }
 }

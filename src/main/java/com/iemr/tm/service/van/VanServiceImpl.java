@@ -34,8 +34,7 @@ public class VanServiceImpl implements VanService {
 	VanRepo vanRepo;
 
 	@Override
-	public M_Van getvan(Integer id) {
-		// TODO Auto-generated method stub		
+	public M_Van getvan(Integer id) {	
 		return vanRepo.findOne(id);
 	}
 

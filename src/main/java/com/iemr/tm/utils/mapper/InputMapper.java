@@ -45,16 +45,7 @@ public class InputMapper
 	static GsonBuilder builder;
 	ExclusionStrategy strategy;
 	Logger logger = LoggerFactory.getLogger(this.getClass().getSimpleName());
-	// @Autowired
-	// ConfigProperties configProperties;
-
-	// @Autowired
-	// SessionObject sessionObject;
-
-	// public void setSessionObject(SessionObject sessionObject)
-	// {
-	// this.sessionObject = sessionObject;
-	// }
+	
 
 	public InputMapper()
 	{
@@ -93,28 +84,5 @@ public class InputMapper
 	 *             the session details from the redis 2. IP address in request and the logged in IP address should be
 	 *             same.
 	 */
-	// private void valildate(String json) throws IEMRException
-	// {
-	// Object obj = new JsonParser().parse(json);
-	// try
-	// {
-	// if (obj instanceof JsonObject)
-	// {
-	// JSONObject reqObj = new JSONObject(json);
-	// String key = reqObj.getString("key");
-	// // Validator.checkKeyExists(key);
-	// } else if (obj instanceof JsonObject)
-	// {
-	// // to do
-	// } else
-	// {
-	// // throw new IEMRException("Invalid login key");
-	// logger.info("Invalid login key");
-	// }
-	// } catch (Exception e)
-	// {
-	// // throw new IEMRException("Invalid login key");
-	// logger.info("Invalid login key");
-	// }
-	// }
+	
 }

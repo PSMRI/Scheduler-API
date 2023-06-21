@@ -89,7 +89,6 @@ public class SchedulingServiceImpl implements SchedulingService {
 		Integer startslot = ((startTime.getHours() * 60) + (startTime.getMinutes())) / 5;
 		Integer endslot = ((endTime.getHours() * 60) + (endTime.getMinutes())) / 5;
 		// Integer startslot=
-		// Integer endslot = startslot + (durationSlot / 5);
 		String currentstatus = slotdetail.substring(startslot, endslot);
 
 		StringBuilder slotfinal = new StringBuilder();
@@ -128,7 +127,7 @@ public class SchedulingServiceImpl implements SchedulingService {
 	@Override
 	public SpecialistAvailabilityDetail markAvailability(SpecialistAvailabilityDetail specialistInput)
 			throws TMException {
-		// TODO Auto-generated method stub
+		
 		// First get configure slot from t_SpecialistAvailability for the date
 		// range and user
 		// HashMap or Map it with date
@@ -137,9 +136,7 @@ public class SchedulingServiceImpl implements SchedulingService {
 		logger.info("specialistInput result" + specialistInput.toString());
 		Date temp = specialistInput.getConfiguredFromDate();
 		final Date startDate = new Date(temp.getYear(), temp.getMonth(), temp.getDate());
-		// startDate.setHours(0);
-		// startDate.setMinutes(0);
-		// startDate.setSeconds(0);
+		
 
 		Date temp1 = specialistInput.getConfiguredToDate();
 		final Date endDate = new Date(temp1.getYear(), temp1.getMonth(), temp1.getDate());
@@ -147,9 +144,7 @@ public class SchedulingServiceImpl implements SchedulingService {
 		final Long userID = specialistInput.getUserID();
 
 		Integer durationDays = (int) ((endDate.getTime() - startDate.getTime()) / 86400000);
-		// endDate.setHours(0);
-		// endDate.setMinutes(0);
-		// endDate.setSeconds(0);
+		
 
 		Timestamp startTime = specialistInput.getConfiguredFromTime();
 		Timestamp endTime = specialistInput.getConfiguredToTime();
@@ -169,24 +164,7 @@ public class SchedulingServiceImpl implements SchedulingService {
 		List<SpecialistAvailability> output = new ArrayList<>();
 		logger.info(startDate.getTime() + "");
 		logger.info(endDate.getTime() + "");
-		// for(Date i=startDate;i.getTime()<=
-		// endDate.getTime();i.setDate(i.getDate()+1)){
-		// System.out.println(i);
-		// SpecialistAvailability now=result.get(i);
-		// if(now==null){
-		// now=new SpecialistAvailability();
-		// now.setUserID(specialistInput.getUserID());
-		// now.setConfiguredDate((Date) i.clone());
-		// now.setTimeSlot(initializeString());
-		// now.setCreatedBy(specialistInput.getCreatedBy());
-		// }else{
-		// now.setModifiedBy(specialistInput.getCreatedBy());
-		// }
-		// now.setTimeSlot(updateString(now.getTimeSlot(), startTime, endTime,
-		// 'A'));
-		// output.add(now);
-		// logger.info("printintg"+now.toString());
-		// }
+	
 
 		List<Integer> excludedays = specialistInput.getExcludeDays();
 		IntStream.rangeClosed(0, durationDays).forEach(e -> {
@@ -214,12 +192,10 @@ public class SchedulingServiceImpl implements SchedulingService {
 				}
 
 			} catch (TMException e1) {
-				// TODO Auto-generated catch block
+			
 				e1.printStackTrace();
 			}
 		});
-
-		// System.out.println(output);
 		logger.info("output result" + output.toString());
 		specialistAvailabilityRepo.save(output);
 		specialistInput = specialistAvailabilityDetailRepo.save(specialistInput);
@@ -231,7 +207,7 @@ public class SchedulingServiceImpl implements SchedulingService {
 	@Override
 	public SpecialistAvailabilityDetail markUnavailability(SpecialistAvailabilityDetail specialistInput)
 			throws TMException {
-		// TODO Auto-generated method stub
+		
 		Date temp = specialistInput.getConfiguredFromDate();
 		Date startDate = new Date(temp.getYear(), temp.getMonth(), temp.getDate());
 
@@ -248,12 +224,9 @@ public class SchedulingServiceImpl implements SchedulingService {
 		System.out.println(specialistInput.getConfiguredFromDate());
 		System.out.println(specialistInput.getConfiguredToDate());
 		System.out.println(specialistInput);
-
-		// logger.info("REsult from DB result" + slotdetails.toString());
 		List<SpecialistAvailability> output = new ArrayList<>();
 		logger.info(startDate.getTime() + "");
-		// logger.info(endDate.getTime()+"");
-		// System.out.println(i);
+		
 		SpecialistAvailability now = slotdetails;
 		if (slotdetails == null) {
 			now = new SpecialistAvailability();
@@ -268,7 +241,6 @@ public class SchedulingServiceImpl implements SchedulingService {
 		output.add(now);
 		logger.info("printintg" + now.toString());
 
-		// System.out.println(output);
 		logger.info("output result" + output.toString());
 		specialistAvailabilityRepo.save(output);
 		specialistInput = specialistAvailabilityDetailRepo.save(specialistInput);
@@ -279,7 +251,7 @@ public class SchedulingServiceImpl implements SchedulingService {
 
 	@Override
 	public SpecialistAvailability fetchavailability(SpecialistInput2 specialistInput) {
-		// TODO Auto-generated method stub
+		
 		SpecialistAvailability slotdetails = specialistAvailabilityRepo
 				.findOneByConfiguredDateAndUserID(specialistInput.getDate(), specialistInput.getUserID());
 		if (slotdetails == null) {
@@ -298,7 +270,7 @@ public class SchedulingServiceImpl implements SchedulingService {
 	public List<Slot> getslotsplit(String slot) {
 
 		Integer size = slotsize / 5;
-		// String[] arrayslot=slot.split("[A-Z]{"+size+"}");
+		
 		List<Slot> slota = new ArrayList<Slot>();
 
 		StringBuilder slotstring = new StringBuilder();
@@ -320,7 +292,7 @@ public class SchedulingServiceImpl implements SchedulingService {
 
 	@Override
 	public String bookSlot(SpecialistInput2 specialistInput, char status) throws TMException {
-		// TODO Auto-generated method stub
+		
 		Date temp = specialistInput.getDate();
 		Date startDate = new Date(temp.getYear(), temp.getMonth(), temp.getDate());
 
@@ -352,7 +324,7 @@ public class SchedulingServiceImpl implements SchedulingService {
 	@Override
 	public List<SpecialistAvailability> fetchmonthavailability(SpecialistInput2 specialistInput, Integer year,
 			Integer month, Integer day) {
-		// TODO Auto-generated method stub
+
 		List<SpecialistAvailability> slotdetails = specialistAvailabilityRepo.findByMonthAndUserID(day, month, year,
 				specialistInput.getUserID());
 		String pattern = "([A]+)|([B]+)";
@@ -381,7 +353,7 @@ public class SchedulingServiceImpl implements SchedulingService {
 
 	@Override
 	public List<Specialist> fetchAllAvailability(SpecialistInput2 specialistInput) throws TMException {
-		// TODO Auto-generated method stub
+		
 		List<SpecialistAvailability> listspec = new ArrayList<>();
 		List<Specialist> user = specialistService.getspecialistUser(specialistInput.getProviderServiceMapID(),
 				specialistInput.getSpecializationID(), specialistInput.getUserID());

@@ -104,7 +104,7 @@ public class SpecialistAvailability {
 	public SpecialistAvailability(){}
 	
 	public SpecialistAvailability(Long userID2, Date date, ArrayList<Slot> arrayList) {
-		// TODO Auto-generated constructor stub
+		
 		this.userID=userID2;
 		this.configuredDate=date;
 		this.slots=arrayList;

@@ -24,7 +24,6 @@ package com.iemr.tm.data.schedule;
 import java.sql.Date;
 import java.sql.Timestamp;
 
-import javax.persistence.Entity;
 import javax.persistence.Transient;
 
 import com.google.gson.annotations.Expose;

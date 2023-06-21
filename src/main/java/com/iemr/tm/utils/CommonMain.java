@@ -37,28 +37,8 @@ public class CommonMain
 		return new ConfigProperties();
 	}
 
-//	@Bean
-//	public SessionObject sessionObject()
-//	{
-//		return new SessionObject();
-//	}
 
-	// @Beanss
-	// public RedisConnection redisConnection()
-	// {
-	// return new RedisConnection();
-	// }
 
-	// @Configuration
-	// @EnableRedisHttpSession
-	// public class Config {
-
-//	@Bean
-//	public LettuceConnectionFactory connectionFactory()
-//	{
-//		return new LettuceConnectionFactory();
-//	}
-	// }
 
 	@Bean
 	public RedisHttpSessionConfiguration redisSession()
@@ -66,19 +46,9 @@ public class CommonMain
 		return new RedisHttpSessionConfiguration();
 	}
 
-//	@Bean
-//	public KMService getOpenKMService()
-//	{
-//		KMService kmService = new OpenKMServiceImpl();
-//		return kmService;
-//	}
-
 	@Bean
 	public RedisStorage redisStorage()
 	{
 		return new RedisStorage();
 	}
-	// public static void main(String[] args) {
-	// SpringApplication.run(CommonMain.class, args);
-	// }
 }

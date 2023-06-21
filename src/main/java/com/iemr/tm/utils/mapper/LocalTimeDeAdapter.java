@@ -36,15 +36,11 @@ public class LocalTimeDeAdapter implements JsonDeserializer<LocalTime> {
 	@Override
 	public LocalTime deserialize(JsonElement arg0, Type arg1, JsonDeserializationContext arg2)
 			throws JsonParseException {
-		// TODO Auto-generated method stub
+		
 		String[]  str=arg0.getAsString().split(":");
 		return LocalTime.of(Integer.parseInt(str[0]), Integer.parseInt(str[1])) ;
 	}
-	
-	
+     // "yyyy-mm-dd"
 
-//    public JsonElement serialize(LocalDate date, Type typeOfSrc, JsonSerializationContext context) {
-//       // "yyyy-mm-dd"
-//    }
 
 }

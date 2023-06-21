@@ -35,15 +35,11 @@ public class LocalTimeAdapter implements JsonSerializer<LocalTime> {
 
 	@Override
 	public JsonElement serialize(LocalTime time, Type arg1, JsonSerializationContext arg2) {
-		// TODO Auto-generated method stub
+		
 		return new JsonPrimitive(time.format(DateTimeFormatter. ISO_TIME));
 		
 	}
-	
-	
+       // "yyyy-mm-dd"
 
-//    public JsonElement serialize(LocalDate date, Type typeOfSrc, JsonSerializationContext context) {
-//       // "yyyy-mm-dd"
-//    }
 
 }

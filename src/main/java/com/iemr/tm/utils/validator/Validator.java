@@ -38,7 +38,7 @@ import com.iemr.tm.utils.sessionobject.SessionObject;
 @Service
 public class Validator
 {
-	// private static SessionObject session;
+	
 
 	private SessionObject session;
 
@@ -49,11 +49,8 @@ public class Validator
 		this.session = sessionObject;
 	}
 
-	// private static void setSessionObject() {
-	// if (session == null) {
-	// session = new SessionObject();
-	// }
-	// }
+	
+	
 
 	private static Boolean enableIPValidation = false;
 

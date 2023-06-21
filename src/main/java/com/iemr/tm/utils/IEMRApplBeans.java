@@ -27,7 +27,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
-import org.springframework.session.data.redis.config.annotation.web.http.RedisHttpSessionConfiguration;
 
 import com.iemr.tm.utils.config.ConfigProperties;
 import com.iemr.tm.utils.gateway.email.EmailService;
@@ -39,12 +38,8 @@ import com.iemr.tm.utils.validator.Validator;
 @Configuration
 public class IEMRApplBeans
 {
-//	@Bean
-//	public KMService getOpenKMService()
-//	{
-//		KMService kmService = new OpenKMServiceImpl();
-//		return kmService;
-//	}
+
+
 
 	@Bean
 	public Validator getVaidator()
@@ -85,16 +80,7 @@ public class IEMRApplBeans
 		return new RedisStorage();
 	}
 
-	// @Beanss
-	// public RedisConnection redisConnection()
-	// {
-	// return new RedisConnection();
-	// }
-
-	// @Configuration
-	// @EnableRedisHttpSession
-	// public class Config
-	// {
+	
 
 	 private @Value("${spring.redis.host}") String redisHost;
 	    private @Value("${spring.redis.port}") int redisPort;
@@ -106,27 +92,5 @@ public class IEMRApplBeans
 		
 		return new LettuceConnectionFactory(redisHost,redisPort);
 	}
-	// }
-
-/*	@Bean
-	public RedisHttpSessionConfiguration redisSession()
-	{
-		return new RedisHttpSessionConfiguration();
-	}*/
-
-	// @Bean
-	// public HTTPRequestInterceptor myInterceptor()
-	// {
-	// return new HTTPRequestInterceptor();
-	// }
-	// @Bean
-	// public KMService getOpenKMService()
-	// {
-	// KMService kmService = new OpenKMServiceImpl();
-	// return kmService;
-	// }
-
-	// public static void main(String[] args) {
-	// SpringApplication.run(CommonMain.class, args);
-	// }
+	
 }
