@@ -29,7 +29,7 @@ import com.iemr.tm.utils.mapper.OutputMapper;
 import lombok.Data;
 
 @Data
-public class M_User {
+public class MUser {
 
 	@Expose
 	private Long userID;

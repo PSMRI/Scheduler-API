@@ -39,7 +39,7 @@ import lombok.Data;
 @Entity
 @Table(name = "m_van")
 @Data
-public class M_Van {
+public class MVan {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)

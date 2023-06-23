@@ -88,7 +88,7 @@ public class SchedulingServiceImpl implements SchedulingService {
 		// C - Cancel appointment
 		Integer startslot = ((startTime.getHours() * 60) + (startTime.getMinutes())) / 5;
 		Integer endslot = ((endTime.getHours() * 60) + (endTime.getMinutes())) / 5;
-		// Integer startslot=
+		
 		String currentstatus = slotdetail.substring(startslot, endslot);
 
 		StringBuilder slotfinal = new StringBuilder();
