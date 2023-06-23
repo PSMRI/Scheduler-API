@@ -33,7 +33,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.iemr.tm.data.specialist.M_User;
+import com.iemr.tm.data.specialist.MUser;
 import com.iemr.tm.data.specialist.Specialist;
 import com.iemr.tm.data.specialist.Specialization;
 import com.iemr.tm.service.specialist.SpecialistService;
@@ -89,7 +89,7 @@ public class SpecialistController {
 		OutputResponse response = new OutputResponse();
 		try {
 
-			M_User user = specialistService.getinfo(userID);
+			MUser user = specialistService.getinfo(userID);
 
 			response.setResponse(user.toString());
 

@@ -21,11 +21,11 @@
 */
 package com.iemr.tm.service.van;
 
-import com.iemr.tm.data.van.M_Van;
+import com.iemr.tm.data.van.MVan;
 
 public interface VanService {
 
-	M_Van getvan(Integer id);
+	MVan getvan(Integer id);
 
 	
 }

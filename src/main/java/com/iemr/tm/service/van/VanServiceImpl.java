@@ -24,7 +24,7 @@ package com.iemr.tm.service.van;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.iemr.tm.data.van.M_Van;
+import com.iemr.tm.data.van.MVan;
 import com.iemr.tm.repo.van.VanRepo;
 
 @Service
@@ -34,7 +34,7 @@ public class VanServiceImpl implements VanService {
 	VanRepo vanRepo;
 
 	@Override
-	public M_Van getvan(Integer id) {	
+	public MVan getvan(Integer id) {	
 		return vanRepo.findOne(id);
 	}
 

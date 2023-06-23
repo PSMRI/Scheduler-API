@@ -30,7 +30,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.iemr.tm.data.van.M_Van;
+import com.iemr.tm.data.van.MVan;
 import com.iemr.tm.service.van.VanService;
 import com.iemr.tm.utils.response.OutputResponse;
 
@@ -50,9 +50,9 @@ public class VanController {
 	public String markavailability(@PathVariable("vanid") Integer vanid) {
 		OutputResponse response = new OutputResponse();
 		try {
-			M_Van van = vanService.getvan(vanid);
+			MVan van = vanService.getvan(vanid);
 			if (van == null) {
-				van = new M_Van();
+				van = new MVan();
 			}
 			response.setResponse(van.toString());
 

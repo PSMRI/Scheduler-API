@@ -27,7 +27,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.iemr.tm.data.specialist.M_User;
+import com.iemr.tm.data.specialist.MUser;
 import com.iemr.tm.data.specialist.Specialist;
 import com.iemr.tm.data.specialist.Specialization;
 import com.iemr.tm.repo.specialist.SpecializationRepo;
@@ -86,9 +86,9 @@ public class SpecialistServiceImpl implements SpecialistService {
 	}
 
 	@Override
-	public M_User getinfo(Long userID) {
+	public MUser getinfo(Long userID) {
 		
-		M_User user = new M_User();
+		MUser user = new MUser();
 		Object[] objlist = specializationRepo.getspecialistinfo(userID);
 
 		if (objlist != null && objlist.length > 0) {
