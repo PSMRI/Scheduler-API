@@ -21,11 +21,13 @@
 */
 package com.iemr.tm.utils.gateway.email;
 
+import org.springframework.boot.configurationprocessor.json.JSONException;
+
 public interface EmailService
 {
-	void sendEmail(String jsonObject, String template);
+	void sendEmail(String jsonObject, String template) throws JSONException;
 
 	void sendEmailWithAttachment(String jsonObject, String template);
 
-	void sendEmail(String jsonObject);
+	void sendEmail(String jsonObject) throws JSONException;
 }

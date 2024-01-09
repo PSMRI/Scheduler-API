@@ -24,13 +24,12 @@ package com.iemr.tm.data.schedule;
 import java.time.LocalTime;
 import java.util.Date;
 
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.persistence.Transient;
-
 import com.google.gson.annotations.Expose;
 import com.iemr.tm.utils.mapper.OutputMapper;
 
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
+import jakarta.persistence.Transient;
 import lombok.Data;
 
 @Data

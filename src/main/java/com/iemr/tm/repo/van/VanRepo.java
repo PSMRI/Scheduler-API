@@ -30,5 +30,7 @@ import com.iemr.tm.data.van.MVan;
 @Repository
 @RestResource(exported = false)
 public interface VanRepo extends JpaRepository<MVan, Integer> {
+	
+	MVan findByVanID(Integer vanID);
 
 }

@@ -23,11 +23,11 @@ package com.iemr.tm.data.schedule;
 
 import java.time.LocalTime;
 
-import javax.persistence.Transient;
 
 import com.google.gson.annotations.Expose;
 import com.iemr.tm.utils.mapper.OutputMapper;
 
+import jakarta.persistence.Transient;
 import lombok.Data;
 
 @Data

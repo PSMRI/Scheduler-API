@@ -39,7 +39,8 @@ import com.iemr.tm.data.specialist.Specialization;
 import com.iemr.tm.service.specialist.SpecialistService;
 import com.iemr.tm.utils.response.OutputResponse;
 
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+
 
 @RestController
 @RequestMapping(value = "/specialist", headers = "Authorization")
@@ -50,7 +51,7 @@ public class SpecialistController {
 	private SpecialistService specialistService;
 
 	@CrossOrigin()
-	@ApiOperation(value = "Fetch master specialization", consumes = "application/json", produces = "application/json")
+	@Operation(summary = "Fetch master specialization")
 	@RequestMapping(value = "masterspecialization", method = RequestMethod.POST)
 	public String markavailability() {
 		OutputResponse response = new OutputResponse();
@@ -66,7 +67,7 @@ public class SpecialistController {
 	}
 
 	@CrossOrigin()
-	@ApiOperation(value = "Fetch list of specialists", consumes = "application/json", produces = "application/json")
+	@Operation(summary = "Fetch list of specialists")
 	@RequestMapping(value = "getSpecialist", method = RequestMethod.POST)
 	public String getSpecialist(@RequestBody Specialist specialist) {
 		OutputResponse response = new OutputResponse();
@@ -83,7 +84,7 @@ public class SpecialistController {
 	}
 
 	@CrossOrigin()
-	@ApiOperation(value = "Fetch user specialist", consumes = "application/json", produces = "application/json")
+	@Operation(summary = "Fetch user specialist")
 	@RequestMapping(value = "info/{userID}", method = RequestMethod.GET)
 	public String info(@PathVariable("userID") Long userID) {
 		OutputResponse response = new OutputResponse();
@@ -101,7 +102,7 @@ public class SpecialistController {
 	}
 
 	@CrossOrigin()
-	@ApiOperation(value = "Fetch all specialists", consumes = "application/json", produces = "application/json")
+	@Operation(summary = "Fetch all specialists")
 	@RequestMapping(value = "getSpecialistAll", method = RequestMethod.POST)
 	public String getSpecialistAll(@RequestBody Specialist specialist) {
 		OutputResponse response = new OutputResponse();

@@ -34,7 +34,9 @@ import com.iemr.tm.data.van.MVan;
 import com.iemr.tm.service.van.VanService;
 import com.iemr.tm.utils.response.OutputResponse;
 
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+
+
 
 @RestController
 @RequestMapping(value = "/van", headers = "Authorization")
@@ -45,7 +47,7 @@ public class VanController {
 	private VanService vanService;
 
 	@CrossOrigin()
-	@ApiOperation(value = "Fetch specialization by van id", consumes = "application/json", produces = "application/json")
+	@Operation(summary = "Fetch specialization by van id")
 	@RequestMapping(value = "getvan/{vanid}", method = RequestMethod.GET)
 	public String markavailability(@PathVariable("vanid") Integer vanid) {
 		OutputResponse response = new OutputResponse();

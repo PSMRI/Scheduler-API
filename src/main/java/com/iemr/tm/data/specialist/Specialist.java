@@ -21,12 +21,12 @@
 */
 package com.iemr.tm.data.specialist;
 
-import javax.persistence.Transient;
 
 import com.google.gson.annotations.Expose;
 import com.iemr.tm.data.schedule.SpecialistAvailability;
 import com.iemr.tm.utils.mapper.OutputMapper;
 
+import jakarta.persistence.Transient;
 import lombok.Data;
 
 @Data
@@ -105,5 +105,14 @@ public class Specialist {
 		this.specialization=specialization;
 
 	}
+
+	public Specialist(Long userID, Long specializationID, Long providerServiceMapID) {
+		super();
+		this.userID = userID;
+		this.specializationID = specializationID;
+		this.providerServiceMapID = providerServiceMapID;
+	}
+	
+	
 
 }

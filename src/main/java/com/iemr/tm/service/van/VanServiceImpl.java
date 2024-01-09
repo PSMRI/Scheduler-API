@@ -35,7 +35,7 @@ public class VanServiceImpl implements VanService {
 
 	@Override
 	public MVan getvan(Integer id) {	
-		return vanRepo.findOne(id);
+		return vanRepo.findByVanID(id);
 	}
 
 	
