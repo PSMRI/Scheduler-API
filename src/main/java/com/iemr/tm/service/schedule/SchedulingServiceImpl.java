@@ -197,7 +197,7 @@ public class SchedulingServiceImpl implements SchedulingService {
 			}
 		});
 		logger.info("output result" + output.toString());
-		specialistAvailabilityRepo.save(output);
+		specialistAvailabilityRepo.saveAll(output);
 		specialistInput = specialistAvailabilityDetailRepo.save(specialistInput);
 
 		return specialistInput;
@@ -242,7 +242,7 @@ public class SchedulingServiceImpl implements SchedulingService {
 		logger.info("printintg" + now.toString());
 
 		logger.info("output result" + output.toString());
-		specialistAvailabilityRepo.save(output);
+		specialistAvailabilityRepo.saveAll(output);
 		specialistInput = specialistAvailabilityDetailRepo.save(specialistInput);
 
 		return specialistInput;

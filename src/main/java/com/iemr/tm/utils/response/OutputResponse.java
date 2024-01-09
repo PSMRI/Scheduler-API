@@ -24,9 +24,11 @@ package com.iemr.tm.utils.response;
 import java.util.Calendar;
 import java.util.Date;
 
-import org.json.JSONObject;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.configurationprocessor.json.JSONException;
+import org.springframework.boot.configurationprocessor.json.JSONObject;
 
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
@@ -151,8 +153,9 @@ public class OutputResponse {
 
 	/**
 	 * @return the data
+	 * @throws JSONException 
 	 */
-	public String getData() {
+	public String getData() throws JSONException {
 		JSONObject obj = new JSONObject(toString());
 		if (obj.has("data")) {
 			return obj.get("data").toString();

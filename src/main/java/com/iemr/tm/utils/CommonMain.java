@@ -29,26 +29,19 @@ import com.iemr.tm.utils.config.ConfigProperties;
 import com.iemr.tm.utils.redis.RedisStorage;
 
 @EnableAutoConfiguration
-public class CommonMain
-{
+public class CommonMain {
 	@Bean
-	public ConfigProperties configProperties()
-	{
+	public ConfigProperties configProperties() {
 		return new ConfigProperties();
 	}
 
-
-
-
 	@Bean
-	public RedisHttpSessionConfiguration redisSession()
-	{
+	public RedisHttpSessionConfiguration redisSession() {
 		return new RedisHttpSessionConfiguration();
 	}
 
 	@Bean
-	public RedisStorage redisStorage()
-	{
+	public RedisStorage redisStorage() {
 		return new RedisStorage();
 	}
 }

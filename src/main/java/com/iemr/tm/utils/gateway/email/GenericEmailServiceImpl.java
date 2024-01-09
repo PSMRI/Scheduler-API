@@ -21,8 +21,10 @@
 */
 package com.iemr.tm.utils.gateway.email;
 
-import org.json.JSONObject;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.configurationprocessor.json.JSONException;
+import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 
@@ -35,7 +37,7 @@ public class GenericEmailServiceImpl implements EmailService {
 	}
 
 	@Override
-	public void sendEmail(String jsonObject, String template) {
+	public void sendEmail(String jsonObject, String template) throws JSONException {
 		SimpleMailMessage mailMessage = new SimpleMailMessage();
 		JSONObject requestObj = new JSONObject(jsonObject);
 		String to = requestObj.getString("to");
@@ -55,7 +57,7 @@ public class GenericEmailServiceImpl implements EmailService {
 	}
 
 	@Override
-	public void sendEmail(String jsonObject) {
+	public void sendEmail(String jsonObject) throws JSONException {
 		SimpleMailMessage mailMessage = new SimpleMailMessage();
 		JSONObject requestObj = new JSONObject(jsonObject);
 		String to = requestObj.getString("to");

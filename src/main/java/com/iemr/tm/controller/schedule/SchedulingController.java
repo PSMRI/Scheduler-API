@@ -41,7 +41,8 @@ import com.iemr.tm.service.schedule.SchedulingService;
 import com.iemr.tm.utils.mapper.InputMapper;
 import com.iemr.tm.utils.response.OutputResponse;
 
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+
 
 @RestController
 @RequestMapping(value = "/schedule", headers = "Authorization")
@@ -52,7 +53,7 @@ public class SchedulingController {
 	private SchedulingService schedulingService;
 
 	@CrossOrigin()
-	@ApiOperation(value = "Mark availability of specialist", consumes = "application/json", produces = "application/json")
+	@Operation(summary = "Mark availability of specialist")
 	@RequestMapping(value = "markavailability", method = RequestMethod.POST)
 	public String markavailability(@RequestBody String specialistInput1) {
 		OutputResponse response = new OutputResponse();
@@ -72,7 +73,7 @@ public class SchedulingController {
 	}
 
 	@CrossOrigin()
-	@ApiOperation(value = "Mark unavailability of specialist", consumes = "application/json", produces = "application/json")
+	@Operation(summary = "Mark unavailability of specialist")
 	@RequestMapping(value = "unmarkavailability", method = RequestMethod.POST)
 	public String unmarkavailability(@RequestBody String specialistInput1) {
 		OutputResponse response = new OutputResponse();
@@ -91,7 +92,7 @@ public class SchedulingController {
 	}
 
 	@CrossOrigin()
-	@ApiOperation(value = "Get available slots of specialist for a particular day", consumes = "application/json", produces = "application/json")
+	@Operation(summary = "Get available slots of specialist for a particular day")
 	@RequestMapping(value = "getavailableSlot", method = RequestMethod.POST)
 	public String getavailableSlot(@RequestBody String specialistInput1) {
 		OutputResponse response = new OutputResponse();
@@ -109,7 +110,7 @@ public class SchedulingController {
 	}
 
 	@CrossOrigin()
-	@ApiOperation(value = "Get available slots of specialist for a particular month", consumes = "application/json", produces = "application/json")
+	@Operation(summary = "Get available slots of specialist for a particular month")
 	@RequestMapping(value = { "/monthview/{year}", "/monthview/{year}/{month}",
 			"/monthview/{year}/{month}/{day}" }, method = RequestMethod.POST)
 	public String view(@RequestBody String specialistInput1, @PathVariable("year") Integer year,
@@ -131,7 +132,7 @@ public class SchedulingController {
 	}
 
 	@CrossOrigin()
-	@ApiOperation(value = "Book available slots of specialist of a particular day", consumes = "application/json", produces = "application/json")
+	@Operation(summary = "Book available slots of specialist of a particular day")
 	@RequestMapping(value = "bookSlot", method = RequestMethod.POST)
 	public String bookSlot(@RequestBody String specialistInput1) {
 		OutputResponse response = new OutputResponse();
@@ -149,7 +150,7 @@ public class SchedulingController {
 	}
 
 	@CrossOrigin()
-	@ApiOperation(value = "Cancel booked slots of specialist of a particular day", consumes = "application/json", produces = "application/json")
+	@Operation(summary = "Cancel booked slots of specialist of a particular day")
 	@RequestMapping(value = "cancelBookedSlot", method = RequestMethod.POST)
 	public String cancelBookedSlot(@RequestBody String specialistInput1) {
 		OutputResponse response = new OutputResponse();
@@ -167,7 +168,7 @@ public class SchedulingController {
 	}
 
 	@CrossOrigin()
-	@ApiOperation(value = "Get day view of particular specialization", consumes = "application/json", produces = "application/json")
+	@Operation(summary = "Get day view of particular specialization")
 	@RequestMapping(value = "getdayview", method = RequestMethod.POST)
 	public String getdayview(@RequestBody String specialistInput1) {
 		OutputResponse response = new OutputResponse();

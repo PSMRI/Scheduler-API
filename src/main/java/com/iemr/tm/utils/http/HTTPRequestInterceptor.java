@@ -21,23 +21,23 @@
 */
 package com.iemr.tm.utils.http;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import com.iemr.tm.utils.response.OutputResponse;
 import com.iemr.tm.utils.sessionobject.SessionObject;
 import com.iemr.tm.utils.validator.Validator;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
 @Component
-public class HTTPRequestInterceptor extends HandlerInterceptorAdapter {
+public class HTTPRequestInterceptor implements HandlerInterceptor {
 	private Validator validator;
 
 	Logger logger = LoggerFactory.getLogger(this.getClass().getSimpleName());
@@ -53,8 +53,6 @@ public class HTTPRequestInterceptor extends HandlerInterceptorAdapter {
 	public void setSessionObject(SessionObject sessionObject) {
 		this.sessionObject = sessionObject;
 	}
-
-	@Override
 
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object object) throws Exception
 
@@ -148,7 +146,6 @@ public class HTTPRequestInterceptor extends HandlerInterceptorAdapter {
 
 	}
 
-	@Override
 	public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object object, Exception arg3)
 			throws Exception {
 		logger.debug("In afterCompletion Request Completed");

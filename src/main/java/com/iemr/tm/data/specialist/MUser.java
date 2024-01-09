@@ -21,11 +21,11 @@
 */
 package com.iemr.tm.data.specialist;
 
-import javax.persistence.Transient;
 
 import com.google.gson.annotations.Expose;
 import com.iemr.tm.utils.mapper.OutputMapper;
 
+import jakarta.persistence.Transient;
 import lombok.Data;
 
 @Data

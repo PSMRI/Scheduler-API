@@ -22,12 +22,11 @@
 package com.iemr.tm.utils.validator;
 
 
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Required;
+import org.springframework.boot.configurationprocessor.json.JSONException;
+import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.stereotype.Service;
 
 import com.iemr.tm.utils.config.ConfigProperties;
@@ -43,7 +42,7 @@ public class Validator
 	private SessionObject session;
 
 	@Autowired(required = true)
-	@Required
+//	@Required
 	public void setSessionObject(SessionObject sessionObject)
 	{
 		this.session = sessionObject;
