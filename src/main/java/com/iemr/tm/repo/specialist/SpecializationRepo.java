@@ -26,13 +26,11 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import org.springframework.data.rest.core.annotation.RestResource;
 import org.springframework.stereotype.Repository;
 
 import com.iemr.tm.data.specialist.Specialization;
 
 @Repository
-@RestResource(exported = false)
 public interface SpecializationRepo extends JpaRepository<Specialization, Integer> {
 
 	List<Specialization> findByDeleted(boolean b);
