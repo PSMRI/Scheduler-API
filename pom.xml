@@ -45,10 +45,12 @@
 					<groupId>jakarta.annotation</groupId>
 					<artifactId>jakarta.annotation-api</artifactId>
 				</exclusion>
+
 				<exclusion>
 					<groupId>org.springframework.boot</groupId>
 					<artifactId>spring-boot-starter-data-rest</artifactId>
 				</exclusion>
+
 			</exclusions>
 		</dependency>
 		<dependency>
@@ -160,9 +162,32 @@
 			<version>2.3.0</version>
 		</dependency>
 
-		
-		
 
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger2</artifactId>
+
+			<version>3.0.0</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.mapstruct</groupId>
+					<artifactId>mapstruct</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger-ui</artifactId>
+
+			<version>3.0.0</version>
+		
+			<exclusions>
+				<exclusion>
+					<groupId>org.mapstruct</groupId>
+					<artifactId>mapstruct</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
 		
 
 		<dependency>
