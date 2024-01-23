@@ -89,6 +89,7 @@ class SchedulingServiceImplTest {
 		List<Slot> slotList = new ArrayList<>();
 		String slot = "ABCDE";
 		slotList = schedulingServiceImpl.getslotsplit(slot);
+		assertNotNull(slotList);
 	}
 
 	@Test
@@ -122,6 +123,7 @@ class SchedulingServiceImplTest {
 		when(specialistAvailabilityRepo.findByMonthAndUserID(Mockito.any(), Mockito.any(), Mockito.any(),
 				Mockito.any())).thenReturn(slotdetails);
 		slotdetails = schedulingServiceImpl.fetchmonthavailability(specialistInput2, year, month, day);
+		assertNotNull(slotdetails);
 	}
 
 	@Test
