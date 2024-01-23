@@ -28,7 +28,8 @@ class VanServiceImplTest {
 		MVan mVan = new MVan();
 		Integer id = 220;
 		when(vanRepo.findByVanID(Mockito.any())).thenReturn(mVan);
-		vanServiceImpl.getvan(id);
+		MVan getvan = vanServiceImpl.getvan(id);
+		assertNotNull(getvan);
 	}
 
 }

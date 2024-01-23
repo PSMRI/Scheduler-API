@@ -34,6 +34,7 @@ public class InterceptorConfig implements WebMvcConfigurer {
 	@Autowired
 	HTTPRequestInterceptor requestInterceptor;
 
+	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		registry.addInterceptor(new BlockingHttpMethodInterceptor()).addPathPatterns("/**");
 	}

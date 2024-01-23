@@ -31,7 +31,8 @@ class SpecialistServiceImplTest {
 	void testGetspecialization() {
 		specializationRepo.findByDeleted(false);
 		
-		specialistServiceImpl.getspecialization();
+		List<Specialization> getspecialization = specialistServiceImpl.getspecialization();
+		assertNotNull(getspecialization);
 	}
 
 	@Test
