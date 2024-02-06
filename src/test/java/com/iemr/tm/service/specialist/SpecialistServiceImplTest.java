@@ -39,6 +39,21 @@ class SpecialistServiceImplTest {
 	void testGetspecialistUser() throws TMException {
 		
 		List<Specialist> specialistList = new ArrayList<>();
+		Specialist specialist = new Specialist();
+		specialist.setContactNo("");
+		specialist.setEmail("");
+		specialist.setFirstName(null);
+		specialist.setGenderName(null);
+		specialist.setLastName(null);
+		specialist.setMiddleName(null);
+		specialist.setParkingPlaceID(null);
+		specialist.setProviderServiceMapID(null);
+		specialist.setSpecialization(null);
+		specialist.setTitleName(null);
+		specialist.setUserID(null);
+		specialist.setUserName(null);
+		specialist.hashCode();
+		specialistList.add(specialist);
 		Long providerservicemapID = 1234L;
 		Long specializationID = 222L;
 		Long userID = 321L;

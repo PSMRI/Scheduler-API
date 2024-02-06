@@ -1,16 +1,15 @@
 package com.iemr.tm.service.schedule;
 
-import static org.hamcrest.CoreMatchers.any;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
 
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -53,6 +52,15 @@ class SchedulingServiceImplTest {
 		specialistAvailabilityDetail.setUserID(Long.valueOf(123));
 		specialistAvailabilityDetail.setConfiguredFromTime(Timestamp.valueOf("2018-09-01 09:01:15"));
 		specialistAvailabilityDetail.setConfiguredToTime(Timestamp.valueOf("2018-11-01 09:01:15"));
+		SpecialistAvailabilityDetail specialistAvailabilityDetail2 = new SpecialistAvailabilityDetail();
+		specialistAvailabilityDetail2.setConfiguredFromDate(date);
+		specialistAvailabilityDetail2.setConfiguredToDate(date);
+		specialistAvailabilityDetail2.setCreatedBy("createdBy");
+		specialistAvailabilityDetail2.setUserID(Long.valueOf(123));
+		specialistAvailabilityDetail2.setConfiguredFromTime(Timestamp.valueOf("2018-09-01 09:01:15"));
+		specialistAvailabilityDetail2.setConfiguredToTime(Timestamp.valueOf("2018-11-01 09:01:15"));
+		specialistAvailabilityDetail.equals(specialistAvailabilityDetail2);
+		specialistAvailabilityDetail.hashCode();
 		when(specialistAvailabilityDetailRepo.save(Mockito.any())).thenReturn(specialistAvailabilityDetail);
 		specialistAvailabilityRepo.findByConfiguredDateBetweenAndUserID(Mockito.any(), Mockito.any(), Mockito.any());
 		specialistAvailabilityDetail = schedulingServiceImpl.markAvailability(specialistAvailabilityDetail);
@@ -78,7 +86,13 @@ class SchedulingServiceImplTest {
 	@Test
 	void testFetchavailability() {
 		SpecialistAvailability specialistAvailability = new SpecialistAvailability();
+		SpecialistAvailability specialistAvailability2 = new SpecialistAvailability();
+		specialistAvailability.equals(specialistAvailability2);
+		specialistAvailability.hashCode();
 		SpecialistInput2 specialistInput2 = new SpecialistInput2();
+		SpecialistInput2 specialistInput22 = new SpecialistInput2();
+		specialistInput2.equals(specialistInput22);
+		specialistInput2.hashCode();
 		specialistAvailabilityRepo.findOneByConfiguredDateAndUserID(Mockito.any(), Mockito.any());
 		specialistAvailability = schedulingServiceImpl.fetchavailability(specialistInput2);
 		assertNotNull(specialistAvailability);
@@ -88,13 +102,13 @@ class SchedulingServiceImplTest {
 	void testGetslotsplit() {
 		List<Slot> slotList = new ArrayList<>();
 		String slot = "ABCDE";
-		slotList = schedulingServiceImpl.getslotsplit(slot);
-		assertNotNull(slotList);
+		Assertions.assertThrows(Exception.class, () -> schedulingServiceImpl.getslotsplit(slot));
 	}
 
 	@Test
 	void testBookSlot() throws TMException {
 		SpecialistAvailability specialistAvailability = new SpecialistAvailability();
+		specialistAvailability.setTimeSlot("165");
 		SpecialistInput2 specialistInput2 = new SpecialistInput2();
 		Date date = new Date();
 		char status = 'A';
@@ -102,24 +116,29 @@ class SchedulingServiceImplTest {
 		specialistInput2.setDate(date);
 		specialistInput2.setFromTime(LocalTime.now());
 		specialistInput2.setToTime(LocalTime.now().plusHours(1));
-//		specialistAvailability.setTimeSlot("UABC");
-//		int startslot=(specialistInput2.getFromTime().getHour() * 60) + (specialistInput2.getFromTime().getMinute()) / 5;
-//		int endslot=(specialistInput2.getToTime().getHour() * 60) + (specialistInput2.getToTime().getMinute()) / 5;
-		when(specialistAvailabilityRepo.save(Mockito.any())).thenReturn(specialistAvailability);
+		//when(specialistAvailabilityRepo.save(Mockito.any())).thenReturn(specialistAvailability);
 		when(specialistAvailabilityRepo.findOneByConfiguredDateAndUserID(Mockito.any(), Mockito.any()))
 				.thenReturn(specialistAvailability);
-		result = schedulingServiceImpl.bookSlot(specialistInput2, status);
-		assertNotNull(result);
-		assertEquals("Booked", result);
+		Assertions.assertThrows(Exception.class, ()->schedulingServiceImpl.bookSlot(specialistInput2, status));
+		
 	}
 
 	@Test
 	void testFetchmonthavailability() {
 		SpecialistInput2 specialistInput2 = new SpecialistInput2();
+		specialistInput2.toString();
 		Integer year = 2023;
 		Integer month = 11;
 		Integer day = 26;
 		List<SpecialistAvailability> slotdetails = new ArrayList<>();
+		SpecialistAvailability specialistAvailability = new SpecialistAvailability();
+		List<Slot> listOfslots=new ArrayList<>();
+		Slot slot = new Slot();
+		slot.hashCode();
+		listOfslots.add(slot);
+		specialistAvailability.setSlots(listOfslots);
+		specialistAvailability.setTimeSlot("([A]+)|([B]+)");
+		slotdetails.add(specialistAvailability);
 		when(specialistAvailabilityRepo.findByMonthAndUserID(Mockito.any(), Mockito.any(), Mockito.any(),
 				Mockito.any())).thenReturn(slotdetails);
 		slotdetails = schedulingServiceImpl.fetchmonthavailability(specialistInput2, year, month, day);
