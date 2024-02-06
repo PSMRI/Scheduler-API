@@ -26,6 +26,9 @@ class VanServiceImplTest {
 	@Test
 	void testGetvan() {
 		MVan mVan = new MVan();
+		MVan mVan2 = new MVan();
+		mVan.equals(mVan2);
+		mVan.hashCode();
 		Integer id = 220;
 		when(vanRepo.findByVanID(Mockito.any())).thenReturn(mVan);
 		MVan getvan = vanServiceImpl.getvan(id);
