@@ -35,11 +35,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
-@Configuration /*
-				 * (defaultAutowire = Autowire.BY_TYPE, defaultLazy = Lazy.FALSE
-				 */
-@PropertySource("classpath:/application.properties")
-// @Component
+@Configuration
 @Component
 public class ConfigProperties {
 	private static Properties properties;
