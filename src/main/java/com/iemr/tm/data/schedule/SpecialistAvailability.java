@@ -46,7 +46,7 @@ import lombok.Data;
 public class SpecialistAvailability {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Expose
 	@Column(name = "SpecialistAvailabilityID")
 	private Long specialistAvailabilityID;
