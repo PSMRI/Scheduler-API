@@ -2,12 +2,12 @@ name: jacoco
 
 on:
   push:
-    branches: [ "feature/Junit"]
+    branches: [ "feature/version/upgrade"]
     paths-ignore:
      - target/**
      
   pull_request:
-     branches: [ "feature/Junit" ]
+     branches: [ "feature/version/upgrade" ]
      paths-ignore:
      - target/**
      
@@ -29,10 +29,10 @@ jobs:
         distribution: 'adopt'
         
     - name: Build with Maven
-        run: mvn -B clean package
+      run: mvn clean install -DENV_VAR=${{ env.ENV_VAR }}
       
-    - name: Run tests with JaCoCo
-        run: mvn test jacoco:report
+    - name: Build WAR file
+      run: mvn -B package --file pom.xml
       
     - name: Upload JaCoCo coverage report
         uses: actions/upload-artifact@v2
