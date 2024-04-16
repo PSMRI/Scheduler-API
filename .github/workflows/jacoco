@@ -1,41 +1,33 @@
-name: jacoco
+name: Jacoco Coverage
 
 on:
-  push:
-    branches: [ "feature/Junit"]
-    paths-ignore:
-     - target/**
-     
   pull_request:
-     branches: [ "feature/Junit" ]
-     paths-ignore:
-     - target/**
-     
-env:
-  ENV_VAR: test
+    branches: [ feature/version/upgrade ]
 
 jobs:
-  Package-test:
+  build-and-test:
     runs-on: ubuntu-latest
+
     steps:
-    
-    - name: Checkout code 
+    - name: Checkout code
       uses: actions/checkout@v2
-      
-    - name: Setup JDK 17
+
+    - name: Set up JDK
       uses: actions/setup-java@v2
       with:
-        java-version: 17
-        distribution: 'adopt'
-        
+        java-version: '17'
+
     - name: Build with Maven
-      run: mvn clean install -DENV_VAR=${{ env.ENV_VAR }}
-      
-    - name: Build WAR file
-      run: mvn -B package --file pom.xml
-      
-    - name: Upload JaCoCo coverage report
-        uses: actions/upload-artifact@v2
-        with:
-          name: jacoco-report
-          path: target/site/jacoco  
+      run: mvn clean verify
+
+    - name: Upload Jacoco Report
+      uses: actions/upload-artifact@v2
+      with:
+        name: jacoco-report
+        path: target/site/jacoco
+
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v2.1.0
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        files: ./target/site/jacoco/jacoco.xml
