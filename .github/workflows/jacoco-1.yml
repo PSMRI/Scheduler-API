@@ -1,39 +1,34 @@
-name: jacoco-1
+name: Jacoco Coverage
 
 on:
   push:
-    branches: [ "feature/Junit"]
-    paths-ignore:
-     - 'target/**'
+    branches:
+      - feature/Junit
   pull_request:
-    branches: [ "feature/Junit" ]
-    paths-ignore:
-     - 'target/**'
-
-env:
-  ENV_VAR: test
+    branches:
+      - feature/Junit
 
 jobs:
-  Package-test:
+  build:
     runs-on: ubuntu-latest
+
     steps:
-    - name: Checkout code 
+    - name: Checkout code
       uses: actions/checkout@v2
-      
-    - name: Setup JDK 17
+
+    - name: Set up JDK
       uses: actions/setup-java@v2
       with:
-        java-version: 17
-        distribution: 'adopt'
-        
-    - name: Build with Maven
-      run: mvn clean install -DENV_VAR=${{ env.ENV_VAR }}
-      
-    - name: Build WAR file
-      run: mvn -B package --file pom.xml
-      
-    - name: Upload JaCoCo coverage report
+        java-version: '17'
+
+    - name: Build with Gradle
+      run: ./gradlew build
+
+    - name: Run tests with Jacoco
+      run: ./gradlew test jacocoTestReport
+
+    - name: Upload Jacoco report
       uses: actions/upload-artifact@v2
       with:
         name: jacoco-report
-        path: target/site/jacoco/index.html
+        path: build/reports/jacoco/test/html
