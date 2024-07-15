@@ -10,6 +10,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.context.annotation.Description;
 
 import com.iemr.tm.data.specialist.Specialist;
 import com.iemr.tm.service.specialist.SpecialistService;
@@ -27,12 +28,14 @@ class SpecialistControllerTest {
 	private SpecialistService specialistService;
 	
 	@Test
+	@Description("Tests successful availability check (TC_TestMarkavailability_ValidData_001)")
 	void testMarkavailability() throws ParseException {
 		String resp = specialistController.markavailability();
 		String status = getStatus(resp);
 		Assertions.assertEquals("Success", status);
 	}
 	@Test
+	@Description("Tests handling exceptions during testMarkavailability (TC_TestMarkavailability_Exception_002)")
 	void testMarkavailabilityException() throws ParseException {
 		when(specialistService.getspecialization()).thenThrow(NullPointerException.class);
 		String resp = specialistController.markavailability();
@@ -41,6 +44,7 @@ class SpecialistControllerTest {
 	}
 
 	@Test
+	@Description("Tests successful retrieval of a specialist by ID (TC_GetSpecialist_ValidId_001)")
 	void testGetSpecialist() throws ParseException {
 		Specialist specialist = new Specialist();
 		specialist.setContactNo("9876543210");
@@ -50,6 +54,7 @@ class SpecialistControllerTest {
 	}
 	
 	@Test
+	@Description("Tests handling exceptions during specialist retrieval in testGetSpecialist (TC_GetSpecialist_Exception_002)")
 	void testGetSpecialistException() throws ParseException, TMException {
 		Specialist specialist = new Specialist();
 		specialist.setContactNo("9876543210");
@@ -60,6 +65,7 @@ class SpecialistControllerTest {
 	}
 
 	@Test
+	@Description("Verifies test display name using TestInfo (TC_TestInfo_DisplayName_001)")
 	void testInfo() throws ParseException {
 		Long userId=9l;
 		String resp = specialistController.info(userId);
@@ -68,6 +74,7 @@ class SpecialistControllerTest {
 	}
 
 	@Test
+	@Description("Tests successful retrieval of all specialists (TC_GetSpecialistAll_Success_001)")
 	void testGetSpecialistAll() throws ParseException {
 		Specialist specialist = new Specialist();
 		specialist.setContactNo("9876543210");
@@ -76,6 +83,7 @@ class SpecialistControllerTest {
 		Assertions.assertEquals("Success", status);
 	}
 	@Test
+	@Description("Tests handling exceptions during specialist retrieval in testGetSpecialistAll (TC_GetSpecialistAll_Exception_002)")
 	void testGetSpecialistAllException() throws ParseException {
 		Specialist specialist = new Specialist();
 		specialist.setContactNo("9876543210");

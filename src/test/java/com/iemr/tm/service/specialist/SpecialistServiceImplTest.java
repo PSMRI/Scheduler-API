@@ -1,6 +1,6 @@
 package com.iemr.tm.service.specialist;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -13,6 +13,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.context.annotation.Description;
 
 import com.iemr.tm.data.specialist.MUser;
 import com.iemr.tm.data.specialist.Specialist;
@@ -28,6 +29,7 @@ class SpecialistServiceImplTest {
 	SpecializationRepo specializationRepo;
 
 	@Test
+	@Description("Tests successful retrieval of a specialization by its ID (TC_GetSpecialization_Success_001)")
 	void testGetspecialization() {
 		specializationRepo.findByDeleted(false);
 		
@@ -36,6 +38,7 @@ class SpecialistServiceImplTest {
 	}
 
 	@Test
+	@Description("Tests successful retrieval of a specialist user by ID (TC_GetSpecialistUser_Success_001)")
 	void testGetspecialistUser() throws TMException {
 		
 		List<Specialist> specialistList = new ArrayList<>();
@@ -65,6 +68,7 @@ class SpecialistServiceImplTest {
 	}
 
 	@Test
+	@Description("Tests successful retrieval of a list of all specialists (TC_GetAllSpecialist_Success_001)")
 	void testGetAllSpecialist() {
 		List<Specialist> specialistList = new ArrayList<>();
 		Long providerservicemapID=1234L;
@@ -74,6 +78,7 @@ class SpecialistServiceImplTest {
 	}
 
 	@Test
+	@Description("Tests successful retrieval of information for an entity (TC_GetInfo_Success_001)")
 	void testGetinfo() {
 		MUser user = new MUser();
 		Long userID=123456L;

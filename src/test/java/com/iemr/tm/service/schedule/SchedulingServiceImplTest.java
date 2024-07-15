@@ -1,11 +1,14 @@
 package com.iemr.tm.service.schedule;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
 import java.sql.Timestamp;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -16,6 +19,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.context.annotation.Description;
 
 import com.iemr.tm.data.schedule.Slot;
 import com.iemr.tm.data.schedule.SpecialistAvailability;
@@ -42,6 +46,7 @@ class SchedulingServiceImplTest {
 	private SpecialistService specialistService;
 
 	@Test
+	@Description("Tests successful availability check (TC_TestMarkavailability_ValidData_001)")
 	void testMarkAvailability() throws TMException {
 
 		SpecialistAvailabilityDetail specialistAvailabilityDetail = new SpecialistAvailabilityDetail();
@@ -69,6 +74,7 @@ class SchedulingServiceImplTest {
 	}
 
 	@Test
+	@Description("Tests successful unmarking of availability (TC_TestUnmarkavailability_ValidData_001)")
 	void testMarkUnavailability() throws TMException {
 		SpecialistAvailabilityDetail specialistAvailabilityDetail = new SpecialistAvailabilityDetail();
 		Date date = new Date();
@@ -82,8 +88,9 @@ class SchedulingServiceImplTest {
 		assertNotNull(specialistAvailabilityDetail);
 
 	}
-
+	
 	@Test
+	@Description("Tests successful fetching of availability for a specialist (TC_FetchAvailability_Success_001)")
 	void testFetchavailability() {
 		SpecialistAvailability specialistAvailability = new SpecialistAvailability();
 		SpecialistAvailability specialistAvailability2 = new SpecialistAvailability();
@@ -99,6 +106,7 @@ class SchedulingServiceImplTest {
 	}
 
 	@Test
+	@Description("Tests successful splitting of available slots (TC_GetSlotSplit_Success_001)")
 	void testGetslotsplit() {
 		List<Slot> slotList = new ArrayList<>();
 		String slot = "ABCDE";
@@ -106,6 +114,7 @@ class SchedulingServiceImplTest {
 	}
 
 	@Test
+	@Description("Tests successful booking of a slot (TC_TestBookSlot_ValidData_001)")
 	void testBookSlot() throws TMException {
 		SpecialistAvailability specialistAvailability = new SpecialistAvailability();
 		specialistAvailability.setTimeSlot("165");
@@ -116,14 +125,15 @@ class SchedulingServiceImplTest {
 		specialistInput2.setDate(date);
 		specialistInput2.setFromTime(LocalTime.now());
 		specialistInput2.setToTime(LocalTime.now().plusHours(1));
-		//when(specialistAvailabilityRepo.save(Mockito.any())).thenReturn(specialistAvailability);
+		// when(specialistAvailabilityRepo.save(Mockito.any())).thenReturn(specialistAvailability);
 		when(specialistAvailabilityRepo.findOneByConfiguredDateAndUserID(Mockito.any(), Mockito.any()))
 				.thenReturn(specialistAvailability);
-		Assertions.assertThrows(Exception.class, ()->schedulingServiceImpl.bookSlot(specialistInput2, status));
-		
+		Assertions.assertThrows(Exception.class, () -> schedulingServiceImpl.bookSlot(specialistInput2, status));
+
 	}
 
 	@Test
+	@Description("Tests successful retrieval of a specialist's availability for a month (TC_FetchMonthAvailability_Success_001)")
 	void testFetchmonthavailability() {
 		SpecialistInput2 specialistInput2 = new SpecialistInput2();
 		specialistInput2.toString();
@@ -132,7 +142,7 @@ class SchedulingServiceImplTest {
 		Integer day = 26;
 		List<SpecialistAvailability> slotdetails = new ArrayList<>();
 		SpecialistAvailability specialistAvailability = new SpecialistAvailability();
-		List<Slot> listOfslots=new ArrayList<>();
+		List<Slot> listOfslots = new ArrayList<>();
 		Slot slot = new Slot();
 		slot.hashCode();
 		listOfslots.add(slot);
@@ -146,6 +156,7 @@ class SchedulingServiceImplTest {
 	}
 
 	@Test
+	@Description("Tests successful retrieval of all available appointments (TC_FetchAllAvailability_Success_001)")
 	void testFetchAllAvailability() throws TMException {
 		SpecialistInput2 specialistInput2 = new SpecialistInput2();
 		List<SpecialistAvailability> slotdetails = new ArrayList<>();

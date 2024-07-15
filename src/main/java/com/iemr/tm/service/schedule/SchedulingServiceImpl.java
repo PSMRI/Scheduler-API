@@ -65,6 +65,11 @@ public class SchedulingServiceImpl implements SchedulingService {
 
 	final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
+	public SchedulingServiceImpl(SpecialistAvailabilityRepo specialistAvailabilityRepo2,
+			SpecialistAvailabilityDetailRepo specialistAvailabilityDetailRepo2) {
+		// TODO Auto-generated constructor stub
+	}
+
 	private String initializeString() {
 		// Each slot is of 5 mins so one hour has 12 slots and day has 12*24
 		// U - Unavailable doctor is not on duty hours
