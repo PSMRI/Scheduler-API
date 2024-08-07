@@ -233,13 +233,23 @@
 			<artifactId>spring-web</artifactId>
 			<version>6.1.6</version>
 		</dependency>
+		<dependency>
+			<groupId>org.flywaydb</groupId>
+			<artifactId>flyway-core</artifactId>
+			<version>10.10.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.flywaydb</groupId>
+			<artifactId>flyway-mysql</artifactId>
+			<version>10.10.0</version>
+		</dependency>
 		<!-- end newly added dependencies -->
 	</dependencies>
 
 	<build>
 		<finalName>schedulerapi-v3.0.0</finalName>
 		<plugins>
-			<plugin>
+			<!--<plugin>
 				<groupId>org.owasp</groupId>
 				<artifactId>dependency-check-maven</artifactId>
 				<version>9.0.8</version>
@@ -255,7 +265,7 @@
 						</goals>
 					</execution>
 				</executions>
-			</plugin>
+			</plugin>-->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>

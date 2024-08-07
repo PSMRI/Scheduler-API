@@ -26,22 +26,23 @@ import javax.ws.rs.core.MediaType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.iemr.tm.utils.exception.CustomExceptionResponse;
 import com.iemr.tm.utils.redis.RedisStorage;
+import com.iemr.tm.utils.sessionObject.SessionObject;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-@Configuration
 @Component
 public class HTTPRequestInterceptor implements HandlerInterceptor {
 	Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 	@Autowired
 	private RedisStorage redisStorage;
+	@Autowired
+	private SessionObject sessionObject;
 
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object object) throws Exception {
@@ -51,7 +52,6 @@ public class HTTPRequestInterceptor implements HandlerInterceptor {
 		if (request.getRequestURI().toLowerCase().contains("swagger-ui"))
 			return status;
 
-	//	String authorization = request.getHeader("Authorization");
 		String authorization = null;
 		String preAuth = request.getHeader("Authorization");
 		if(null != preAuth && preAuth.contains("Bearer "))
@@ -86,7 +86,7 @@ public class HTTPRequestInterceptor implements HandlerInterceptor {
 					if (authorization == null)
 						throw new Exception(
 								"Authorization key is NULL, please pass valid session key to proceed further. ");
-					String userRespFromRedis = redisStorage.getSessionObject(authorization);
+					String userRespFromRedis = sessionObject.getSessionObject(authorization);
 					if (userRespFromRedis == null)
 						throw new Exception("invalid Authorization key, please pass a valid key to proceed further. ");
 					break;
@@ -112,10 +112,8 @@ public class HTTPRequestInterceptor implements HandlerInterceptor {
 	@Override
 	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object object, ModelAndView model)
 			throws Exception {
-		logger.info("http interceptor - post Handle");
 		try {
-
-		//	String authorization = request.getHeader("Authorization");
+			logger.debug("In postHandle we are Intercepting the Request");
 			String authorization = null;
 			String postAuth = request.getHeader("Authorization");
 			if(null != postAuth && postAuth.contains("Bearer "))
@@ -124,13 +122,11 @@ public class HTTPRequestInterceptor implements HandlerInterceptor {
 				authorization = postAuth;
 			logger.debug("RequestURI::" + request.getRequestURI() + " || Authorization ::" + authorization);
 			if (authorization != null) {
-//				redisStorage.updateConcurrentSessionObject(redisStorage.getSessionObject(authorization));
-//				redisStorage.updateSessionObject(authorization);
+				sessionObject.updateSessionObject(authorization, sessionObject.getSessionObject(authorization));
 			}
 		} catch (Exception e) {
-			logger.error("postHandle failed with error " + e.getMessage());
+			logger.debug("postHandle failed with error " + e.getMessage());
 		}
-
 	}
 
 	@Override
