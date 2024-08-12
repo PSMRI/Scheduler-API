@@ -233,16 +233,7 @@
 			<artifactId>spring-web</artifactId>
 			<version>6.1.6</version>
 		</dependency>
-		<dependency>
-			<groupId>org.flywaydb</groupId>
-			<artifactId>flyway-core</artifactId>
-			<version>10.10.0</version>
-		</dependency>
-		<dependency>
-			<groupId>org.flywaydb</groupId>
-			<artifactId>flyway-mysql</artifactId>
-			<version>10.10.0</version>
-		</dependency>
+		
 		<!-- end newly added dependencies -->
 	</dependencies>
 
