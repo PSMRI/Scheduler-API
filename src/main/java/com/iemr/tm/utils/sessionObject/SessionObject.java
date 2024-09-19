@@ -1,5 +1,6 @@
 package com.iemr.tm.utils.sessionObject;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.google.gson.JsonElement;
@@ -12,7 +13,7 @@ import com.iemr.tm.utils.redis.RedisStorage;
 @Component
 public class SessionObject {
 	private RedisStorage objectStore;
-
+	@Autowired
 	public void setObjectStore(RedisStorage objectStore) {
 		this.objectStore = objectStore;
 	}
