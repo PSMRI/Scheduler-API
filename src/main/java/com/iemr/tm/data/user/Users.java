@@ -18,4 +18,6 @@ public class Users {
 	private Long userID;
 	@Column(name = "UserName")
 	private String userName;
+	@Column(name = "Deleted", insertable = false, updatable = true)
+	private Boolean deleted;
 }
