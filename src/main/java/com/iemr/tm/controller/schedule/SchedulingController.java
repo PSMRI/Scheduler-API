@@ -52,7 +52,7 @@ public class SchedulingController {
 	@Autowired
 	private SchedulingService schedulingService;
 
-	@CrossOrigin()
+	
 	@Operation(summary = "Mark availability of specialist")
 	@RequestMapping(value = "markavailability", method = RequestMethod.POST)
 	public String markavailability(@RequestBody String specialistInput1) {
@@ -72,7 +72,7 @@ public class SchedulingController {
 		return response.toString();
 	}
 
-	@CrossOrigin()
+	
 	@Operation(summary = "Mark unavailability of specialist")
 	@RequestMapping(value = "unmarkavailability", method = RequestMethod.POST)
 	public String unmarkavailability(@RequestBody String specialistInput1) {
@@ -91,7 +91,7 @@ public class SchedulingController {
 		return response.toString();
 	}
 
-	@CrossOrigin()
+	
 	@Operation(summary = "Get available slots of specialist for a particular day")
 	@RequestMapping(value = "getavailableSlot", method = RequestMethod.POST)
 	public String getavailableSlot(@RequestBody String specialistInput1) {
@@ -109,7 +109,7 @@ public class SchedulingController {
 		return response.toString();
 	}
 
-	@CrossOrigin()
+	
 	@Operation(summary = "Get available slots of specialist for a particular month")
 	@RequestMapping(value = { "/monthview/{year}", "/monthview/{year}/{month}",
 			"/monthview/{year}/{month}/{day}" }, method = RequestMethod.POST)
@@ -131,7 +131,7 @@ public class SchedulingController {
 		return response.toString();
 	}
 
-	@CrossOrigin()
+	
 	@Operation(summary = "Book available slots of specialist of a particular day")
 	@RequestMapping(value = "bookSlot", method = RequestMethod.POST)
 	public String bookSlot(@RequestBody String specialistInput1) {
@@ -149,7 +149,7 @@ public class SchedulingController {
 		return response.toString();
 	}
 
-	@CrossOrigin()
+	
 	@Operation(summary = "Cancel booked slots of specialist of a particular day")
 	@RequestMapping(value = "cancelBookedSlot", method = RequestMethod.POST)
 	public String cancelBookedSlot(@RequestBody String specialistInput1) {
@@ -167,7 +167,7 @@ public class SchedulingController {
 		return response.toString();
 	}
 
-	@CrossOrigin()
+	
 	@Operation(summary = "Get day view of particular specialization")
 	@RequestMapping(value = "getdayview", method = RequestMethod.POST)
 	public String getdayview(@RequestBody String specialistInput1) {
