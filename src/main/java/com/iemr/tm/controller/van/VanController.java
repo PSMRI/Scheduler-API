@@ -46,7 +46,7 @@ public class VanController {
 	@Autowired
 	private VanService vanService;
 
-	@CrossOrigin()
+	
 	@Operation(summary = "Fetch specialization by van id")
 	@RequestMapping(value = "getvan/{vanid}", method = RequestMethod.GET)
 	public String markavailability(@PathVariable("vanid") Integer vanid) {
