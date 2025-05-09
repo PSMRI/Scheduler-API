@@ -34,7 +34,7 @@ config.json
 .tern-project
 mvnw
 mvnw.cmd
-
+.DS_Store
 # Properties
 src/main/environment/common_local.properties
 node_modules
