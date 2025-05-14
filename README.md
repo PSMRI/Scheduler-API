@@ -12,7 +12,7 @@ It acts as an interface between client and the scheduling services provided, all
 This microservice is built on Java, Spring boot framework and MySQL DB.
 
 ### Prerequisites 
-* JDK 1.8
+* JDK 17
 * Wildfly (or any compatible app server)
 * Redis
 * MySQL Database
