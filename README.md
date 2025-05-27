@@ -1,5 +1,5 @@
 # AMRIT - Scheduler Service
-[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)  ![branch parameter](https://github.com/PSMRI/HWC-API/actions/workflows/sast-and-package.yml/badge.svg)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
 It acts as an interface between client and the scheduling services provided, allowing users to interact for consultation with specialists. It also provides the info of availability and unavailability of specialists, retrieving available slots for specialists, booking and cancelling slots, and fetching day views of specialists for a particular specialization.
 
@@ -12,7 +12,7 @@ It acts as an interface between client and the scheduling services provided, all
 This microservice is built on Java, Spring boot framework and MySQL DB.
 
 ### Prerequisites 
-* JDK 1.8
+* JDK 17
 * Wildfly (or any compatible app server)
 * Redis
 * MySQL Database
@@ -33,6 +33,49 @@ To install the MMU module, please follow these steps:
 
 ## Usage
 All features have been exposed as REST endpoints. Refer to the SWAGGER API specification for details.
+
+## Setting Up Commit Hooks
+
+This project uses Git hooks to enforce consistent code quality and commit message standards. Even though this is a Java project, the hooks are powered by Node.js. Follow these steps to set up the hooks locally:
+
+### Prerequisites
+- Node.js (v14 or later)
+- npm (comes with Node.js)
+
+### Setup Steps
+
+1. **Install Node.js and npm**
+   - Download and install from [nodejs.org](https://nodejs.org/)
+   - Verify installation with:
+     ```
+     node --version
+     npm --version
+     ```
+2. **Install dependencies**
+   - From the project root directory, run:
+     ```
+     npm ci
+     ```
+   - This will install all required dependencies including Husky and commitlint
+3. **Verify hooks installation**
+   - The hooks should be automatically installed by Husky
+   - You can verify by checking if the `.husky` directory contains executable hooks
+### Commit Message Convention
+This project follows a specific commit message format:
+- Format: `type(scope): subject`
+- Example: `feat(login): add remember me functionality`
+Types include:
+- `feat`: A new feature
+- `fix`: A bug fix
+- `docs`: Documentation changes
+- `style`: Code style changes (formatting, etc.)
+- `refactor`: Code changes that neither fix bugs nor add features
+- `perf`: Performance improvements
+- `test`: Adding or fixing tests
+- `build`: Changes to build process or tools
+- `ci`: Changes to CI configuration
+- `chore`: Other changes (e.g., maintenance tasks, dependencies)
+Your commit messages will be automatically validated when you commit, ensuring project consistency.
 
 ## Filing Issues
 
