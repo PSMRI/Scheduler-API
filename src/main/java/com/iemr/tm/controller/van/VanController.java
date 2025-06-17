@@ -24,7 +24,7 @@ package com.iemr.tm.controller.van;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
+
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -36,8 +36,6 @@ import com.iemr.tm.utils.response.OutputResponse;
 
 import io.swagger.v3.oas.annotations.Operation;
 
-
-
 @RestController
 @RequestMapping(value = "/van", headers = "Authorization")
 public class VanController {
@@ -46,7 +44,6 @@ public class VanController {
 	@Autowired
 	private VanService vanService;
 
-	@CrossOrigin()
 	@Operation(summary = "Fetch specialization by van id")
 	@RequestMapping(value = "getvan/{vanid}", method = RequestMethod.GET)
 	public String markavailability(@PathVariable("vanid") Integer vanid) {
