@@ -26,7 +26,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
+
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -41,7 +41,6 @@ import com.iemr.tm.utils.response.OutputResponse;
 
 import io.swagger.v3.oas.annotations.Operation;
 
-
 @RestController
 @RequestMapping(value = "/specialist", headers = "Authorization")
 public class SpecialistController {
@@ -50,7 +49,6 @@ public class SpecialistController {
 	@Autowired
 	private SpecialistService specialistService;
 
-	@CrossOrigin()
 	@Operation(summary = "Fetch master specialization")
 	@RequestMapping(value = "masterspecialization", method = RequestMethod.POST)
 	public String markavailability() {
@@ -66,7 +64,6 @@ public class SpecialistController {
 		return response.toString();
 	}
 
-	@CrossOrigin()
 	@Operation(summary = "Fetch list of specialists")
 	@RequestMapping(value = "getSpecialist", method = RequestMethod.POST)
 	public String getSpecialist(@RequestBody Specialist specialist) {
@@ -83,7 +80,6 @@ public class SpecialistController {
 		return response.toString();
 	}
 
-	@CrossOrigin()
 	@Operation(summary = "Fetch user specialist")
 	@RequestMapping(value = "info/{userID}", method = RequestMethod.GET)
 	public String info(@PathVariable("userID") Long userID) {
@@ -101,7 +97,6 @@ public class SpecialistController {
 		return response.toString();
 	}
 
-	@CrossOrigin()
 	@Operation(summary = "Fetch all specialists")
 	@RequestMapping(value = "getSpecialistAll", method = RequestMethod.POST)
 	public String getSpecialistAll(@RequestBody Specialist specialist) {
