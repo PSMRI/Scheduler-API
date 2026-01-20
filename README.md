@@ -1,5 +1,6 @@
 # AMRIT - Scheduler Service
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+[![DeepWiki](https://img.shields.io/badge/DeepWiki-PSMRI%2FScheduler--API-blue)](https://deepwiki.com/PSMRI/Scheduler-API)
 
 It acts as an interface between client and the scheduling services provided, allowing users to interact for consultation with specialists. It also provides the info of availability and unavailability of specialists, retrieving available slots for specialists, booking and cancelling slots, and fetching day views of specialists for a particular specialization.
 
