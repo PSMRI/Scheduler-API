@@ -71,11 +71,13 @@ jobs:
           sleep 5
           # Force kill the process group if still running
           if [ -f api_pid.txt ]; then
-            kill -TERM -- -$(cat api_pid.txt) || true
-            sleep 5
-            kill -KILL -- -$(cat api_pid.txt) || true
-            pkill -P $(cat api_pid.txt) || true
-            fuser -k 9090/tcp || true
+              PID=$(cat api_pid.txt)
+              kill -TERM -- -"$PID" 2>/dev/null || true
+              sleep 2
+              kill -9 -- -"$PID" 2>/dev/null || true
+            fi
+            # Fallback: kill any remaining java process on port 9090
+            fuser -k 9090/tcp 2>/dev/null || true
           fi
 
       - name: Checkout AMRIT-Docs
@@ -92,7 +94,7 @@ jobs:
           cp scheduler-api.json amrit-docs/docs/swagger/scheduler-api.json
 
       - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v6
+        uses: peter-evans/create-pull-request@v8
         with:
           token: ${{ secrets.DOCS_REPO_TOKEN }}
           path: amrit-docs
@@ -100,6 +102,7 @@ jobs:
           base: main
           commit-message: "chore(docs): auto-update Scheduler-API swagger"
           title: "chore(docs): auto-update Scheduler-API swagger"
+          delete-branch: true
           body: |
             This PR automatically updates Scheduler-API Swagger JSON
             from the latest main branch build.
