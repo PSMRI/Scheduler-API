@@ -78,7 +78,6 @@ jobs:
             fi
             # Fallback: kill any remaining java process on port 9090
             fuser -k 9090/tcp 2>/dev/null || true
-          fi
 
       - name: Checkout AMRIT-Docs
         uses: actions/checkout@v4
