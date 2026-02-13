@@ -23,7 +23,7 @@ public class SwaggerConfig {
         String uatUrl = env.getProperty("api.uat.url", DEFAULT_SERVER_URL);
         String demoUrl = env.getProperty("api.demo.url", DEFAULT_SERVER_URL);
         return new OpenAPI()
-            .info(new Info().title("Scheduler API").version("version").description("A microservice for scheduling and appointment management."))
+            .info(new Info().title("Scheduler API").version("1.0.0").description("A microservice for scheduling and appointment management."))
             .addSecurityItem(new SecurityRequirement().addList("bearerAuth"))
             .components(new Components().addSecuritySchemes("bearerAuth",
                 new SecurityScheme().name("bearerAuth").type(SecurityScheme.Type.HTTP).scheme("bearer")))
