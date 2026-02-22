@@ -29,11 +29,13 @@ import java.time.Instant;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+import java.util.concurrent.ExecutionException;
 import java.util.function.Supplier;
 import jakarta.annotation.PreDestroy;
 import javax.sql.DataSource;
@@ -65,14 +67,21 @@ public class HealthService {
     private static final String ERROR_KEY = "error";
     private static final String MESSAGE_KEY = "message";
     private static final String RESPONSE_TIME_KEY = "responseTimeMs";
+    
+    // Component names
+    private static final String MYSQL_COMPONENT = "MySQL";
+    private static final String REDIS_COMPONENT = "Redis";
+    
+    // Timeouts (in seconds)
     private static final long MYSQL_TIMEOUT_SECONDS = 3;
     private static final long REDIS_TIMEOUT_SECONDS = 3;
     
+    // Advanced checks configuration
+    private static final long ADVANCED_CHECKS_TIMEOUT_MS = 500L; // ms — enforced below
     private static final long ADVANCED_CHECKS_THROTTLE_SECONDS = 30;
     private static final long RESPONSE_TIME_THRESHOLD_MS = 2000;
     
     private static final String DIAGNOSTIC_LOCK_WAIT = "MYSQL_LOCK_WAIT";
-    private static final String DIAGNOSTIC_DEADLOCK = "MYSQL_DEADLOCK";
     private static final String DIAGNOSTIC_SLOW_QUERIES = "MYSQL_SLOW_QUERIES";
     private static final String DIAGNOSTIC_POOL_EXHAUSTED = "MYSQL_POOL_EXHAUSTED";
     private static final String DIAGNOSTIC_LOG_TEMPLATE = "Diagnostic: {}";
@@ -80,20 +89,26 @@ public class HealthService {
     private final DataSource dataSource;
     private final RedisTemplate<String, Object> redisTemplate;
     private final ExecutorService executorService;
+    private final ExecutorService advancedCheckExecutor;
     
     private volatile long lastAdvancedCheckTime = 0;
     private volatile AdvancedCheckResult cachedAdvancedCheckResult = null;
     private final ReentrantReadWriteLock advancedCheckLock = new ReentrantReadWriteLock();
+    private final AtomicBoolean advancedCheckInProgress = new AtomicBoolean(false);
     
-    private volatile boolean deadlockCheckDisabled = false;
-    
+    // Advanced checks always enabled
     private static final boolean ADVANCED_HEALTH_CHECKS_ENABLED = true;
 
     public HealthService(DataSource dataSource,
                         @Autowired(required = false) RedisTemplate<String, Object> redisTemplate) {
         this.dataSource = dataSource;
         this.redisTemplate = redisTemplate;
-        this.executorService = Executors.newFixedThreadPool(2);
+        this.executorService = Executors.newFixedThreadPool(6);
+        this.advancedCheckExecutor = Executors.newSingleThreadExecutor(r -> {
+            Thread t = new Thread(r, "health-advanced-check");
+            t.setDaemon(true);
+            return t;
+        });
     }
 
     @PreDestroy
@@ -111,6 +126,9 @@ public class HealthService {
                 logger.warn("ExecutorService shutdown interrupted", e);
             }
         }
+        if (advancedCheckExecutor != null && !advancedCheckExecutor.isShutdown()) {
+            advancedCheckExecutor.shutdownNow();
+        }
     }
 
     public Map<String, Object> checkHealth() {
@@ -120,47 +138,67 @@ public class HealthService {
         Map<String, Object> mysqlStatus = new ConcurrentHashMap<>();
         Map<String, Object> redisStatus = new ConcurrentHashMap<>();
         
-        Future<?> mysqlFuture = executorService.submit(
-            () -> performHealthCheck("MySQL", mysqlStatus, this::checkMySQLHealthSync));
-        Future<?> redisFuture = executorService.submit(
-            () -> performHealthCheck("Redis", redisStatus, this::checkRedisHealthSync));
-        
-        long maxTimeout = Math.max(MYSQL_TIMEOUT_SECONDS, REDIS_TIMEOUT_SECONDS) + 1;
-        long deadlineNs = System.nanoTime() + TimeUnit.SECONDS.toNanos(maxTimeout);
-        try {
-            mysqlFuture.get(maxTimeout, TimeUnit.SECONDS);
-            long remainingNs = deadlineNs - System.nanoTime();
-            if (remainingNs > 0) {
-                redisFuture.get(remainingNs, TimeUnit.NANOSECONDS);
-            } else {
-                redisFuture.cancel(true);
-            }
-        } catch (TimeoutException e) {
-            logger.warn("Health check aggregate timeout after {} seconds", maxTimeout);
-            mysqlFuture.cancel(true);
-            redisFuture.cancel(true);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            logger.warn("Health check was interrupted");
-            mysqlFuture.cancel(true);
-            redisFuture.cancel(true);
-        } catch (Exception e) {
-            logger.warn("Health check execution error: {}", e.getMessage());
+        if (!executorService.isShutdown()) {
+            performHealthChecks(mysqlStatus, redisStatus);
         }
         
-        ensurePopulated(mysqlStatus, "MySQL");
-        ensurePopulated(redisStatus, "Redis");
+        ensurePopulated(mysqlStatus, MYSQL_COMPONENT);
+        ensurePopulated(redisStatus, REDIS_COMPONENT);
         
         Map<String, Map<String, Object>> components = new LinkedHashMap<>();
         components.put("mysql", mysqlStatus);
         components.put("redis", redisStatus);
         
         response.put("components", components);
-        
-        String overallStatus = computeOverallStatus(components);
-        response.put(STATUS_KEY, overallStatus);
+        response.put(STATUS_KEY, computeOverallStatus(components));
         
         return response;
+    }
+
+    private void performHealthChecks(Map<String, Object> mysqlStatus, Map<String, Object> redisStatus) {
+        Future<?> mysqlFuture = null;
+        Future<?> redisFuture = null;
+        try {
+            mysqlFuture = executorService.submit(
+                () -> performHealthCheck(MYSQL_COMPONENT, mysqlStatus, this::checkMySQLHealthSync));
+            redisFuture = executorService.submit(
+                () -> performHealthCheck(REDIS_COMPONENT, redisStatus, this::checkRedisHealthSync));
+            
+            awaitHealthChecks(mysqlFuture, redisFuture);
+        } catch (TimeoutException e) {
+            logger.warn("Health check aggregate timeout after {} seconds", getMaxTimeout());
+            cancelFutures(mysqlFuture, redisFuture);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            logger.warn("Health check was interrupted");
+            cancelFutures(mysqlFuture, redisFuture);
+        } catch (Exception e) {
+            logger.warn("Health check execution error: {}", e.getMessage());
+            cancelFutures(mysqlFuture, redisFuture);
+        }
+    }
+
+    private void awaitHealthChecks(Future<?> mysqlFuture, Future<?> redisFuture) throws TimeoutException, InterruptedException, ExecutionException {
+        long maxTimeout = getMaxTimeout();
+        long deadlineNs = System.nanoTime() + TimeUnit.SECONDS.toNanos(maxTimeout);
+        
+        mysqlFuture.get(maxTimeout, TimeUnit.SECONDS);
+        long remainingNs = deadlineNs - System.nanoTime();
+        
+        if (remainingNs > 0) {
+            redisFuture.get(remainingNs, TimeUnit.NANOSECONDS);
+        } else {
+            redisFuture.cancel(true);
+        }
+    }
+
+    private long getMaxTimeout() {
+        return Math.max(MYSQL_TIMEOUT_SECONDS, REDIS_TIMEOUT_SECONDS) + 1;
+    }
+
+    private void cancelFutures(Future<?> mysqlFuture, Future<?> redisFuture) {
+        if (mysqlFuture != null) mysqlFuture.cancel(true);
+        if (redisFuture != null) redisFuture.cancel(true);
     }
 
     private void ensurePopulated(Map<String, Object> status, String componentName) {
@@ -172,24 +210,24 @@ public class HealthService {
     }
 
     private HealthCheckResult checkMySQLHealthSync() {
+        boolean basicPassed = false;
         try (Connection connection = dataSource.getConnection();
              PreparedStatement stmt = connection.prepareStatement("SELECT 1 as health_check")) {
             
             stmt.setQueryTimeout((int) MYSQL_TIMEOUT_SECONDS);
             
             try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    boolean isDegraded = performAdvancedMySQLChecksWithThrottle(connection);
-                    return new HealthCheckResult(true, null, isDegraded);
-                }
+                basicPassed = rs.next();
             }
-            
-            return new HealthCheckResult(false, "No result from health check query", false);
-            
         } catch (Exception e) {
             logger.warn("MySQL health check failed: {}", e.getMessage(), e);
             return new HealthCheckResult(false, "MySQL connection failed", false);
         }
+        if (!basicPassed) {
+            return new HealthCheckResult(false, "No result from health check query", false);
+        }
+        boolean isDegraded = performAdvancedMySQLChecksWithThrottle();
+        return new HealthCheckResult(true, null, isDegraded);
     }
 
     private HealthCheckResult checkRedisHealthSync() {
@@ -304,52 +342,98 @@ public class HealthService {
         return STATUS_UP;
     }
 
-    private boolean performAdvancedMySQLChecksWithThrottle(Connection connection) {
+    // Internal advanced health checks for MySQL - do not expose details in responses
+    private boolean performAdvancedMySQLChecksWithThrottle() {
         if (!ADVANCED_HEALTH_CHECKS_ENABLED) {
-            return false;
+            return false; // Advanced checks disabled
         }
         
         long currentTime = System.currentTimeMillis();
         
+        // Check throttle window - use read lock first for fast path
         advancedCheckLock.readLock().lock();
         try {
             if (cachedAdvancedCheckResult != null && 
                 (currentTime - lastAdvancedCheckTime) < ADVANCED_CHECKS_THROTTLE_SECONDS * 1000) {
+                // Return cached result - within throttle window
                 return cachedAdvancedCheckResult.isDegraded;
             }
         } finally {
             advancedCheckLock.readLock().unlock();
         }
         
-        advancedCheckLock.writeLock().lock();
-        try {
-            if (cachedAdvancedCheckResult != null && 
-                (currentTime - lastAdvancedCheckTime) < ADVANCED_CHECKS_THROTTLE_SECONDS * 1000) {
-                return cachedAdvancedCheckResult.isDegraded;
+        // Only one thread may submit; others fall back to the (stale) cache
+        if (!advancedCheckInProgress.compareAndSet(false, true)) {
+            advancedCheckLock.readLock().lock();
+            try {
+                return cachedAdvancedCheckResult != null && cachedAdvancedCheckResult.isDegraded;
+            } finally {
+                advancedCheckLock.readLock().unlock();
             }
+        }
+        
+        try {
+            // Outside throttle window - acquire write lock and run checks
+            Future<AdvancedCheckResult> future = advancedCheckExecutor.submit(this::performAdvancedMySQLChecks);
+            AdvancedCheckResult result = handleAdvancedChecksFuture(future);
             
-            AdvancedCheckResult result = performAdvancedMySQLChecks(connection);
-            
-            lastAdvancedCheckTime = currentTime;
-            cachedAdvancedCheckResult = result;
-            
-            return result.isDegraded;
+            // Re-acquire write lock only to update the cache atomically
+            advancedCheckLock.writeLock().lock();
+            try {
+                lastAdvancedCheckTime = currentTime;
+                cachedAdvancedCheckResult = result;
+                return result.isDegraded;
+            } finally {
+                advancedCheckLock.writeLock().unlock();
+            }
         } finally {
-            advancedCheckLock.writeLock().unlock();
+            advancedCheckInProgress.set(false);
+        }
+    }
+    
+    private AdvancedCheckResult handleAdvancedChecksFuture(Future<AdvancedCheckResult> future) {
+        try {
+            return future.get(ADVANCED_CHECKS_TIMEOUT_MS, TimeUnit.MILLISECONDS);
+        } catch (TimeoutException ex) {
+            logger.debug("Advanced MySQL checks timed out after {}ms", ADVANCED_CHECKS_TIMEOUT_MS);
+            future.cancel(true);
+            return new AdvancedCheckResult(true); // treat timeout as degraded
+        } catch (ExecutionException ex) {
+            future.cancel(true);
+            if (ex.getCause() instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+                logger.debug("Advanced MySQL checks were interrupted");
+            } else {
+                logger.debug("Advanced MySQL checks failed: {}", ex.getCause() != null ? ex.getCause().getMessage() : ex.getMessage());
+            }
+            return new AdvancedCheckResult(true);
+        } catch (InterruptedException ex) {
+            Thread.currentThread().interrupt();
+            logger.debug("Advanced MySQL checks interrupted");
+            future.cancel(true);
+            return new AdvancedCheckResult(true);
+        } catch (Exception ex) {
+            logger.debug("Advanced MySQL checks failed: {}", ex.getMessage());
+            future.cancel(true);
+            return new AdvancedCheckResult(true);
         }
     }
 
-    private AdvancedCheckResult performAdvancedMySQLChecks(Connection connection) {
+    private AdvancedCheckResult performAdvancedMySQLChecks() {
+        try (Connection connection = dataSource.getConnection()) {
+            return performAdvancedCheckLogic(connection);
+        } catch (Exception e) {
+            logger.debug("Advanced MySQL checks could not obtain connection: {}", e.getMessage());
+            return new AdvancedCheckResult(true);
+        }
+    }
+
+    private AdvancedCheckResult performAdvancedCheckLogic(Connection connection) {
         try {
             boolean hasIssues = false;
             
             if (hasLockWaits(connection)) {
                 logger.warn(DIAGNOSTIC_LOG_TEMPLATE, DIAGNOSTIC_LOCK_WAIT);
-                hasIssues = true;
-            }
-            
-            if (hasDeadlocks(connection)) {
-                logger.warn(DIAGNOSTIC_LOG_TEMPLATE, DIAGNOSTIC_DEADLOCK);
                 hasIssues = true;
             }
             
@@ -376,7 +460,7 @@ public class HealthService {
                 "WHERE (state = 'Waiting for table metadata lock' " +
                 "   OR state = 'Waiting for row lock' " +
                 "   OR state = 'Waiting for lock') " +
-                "AND user = USER()")) {
+                "AND user = SUBSTRING_INDEX(USER(), '@', 1)")) {
             stmt.setQueryTimeout(2);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
@@ -390,31 +474,6 @@ public class HealthService {
         return false;
     }
 
-    private boolean hasDeadlocks(Connection connection) {
-        if (deadlockCheckDisabled) {
-            return false;
-        }
-        
-        try (PreparedStatement stmt = connection.prepareStatement("SHOW ENGINE INNODB STATUS")) {
-            stmt.setQueryTimeout(2);
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    String innodbStatus = rs.getString(3);
-                    return innodbStatus != null && innodbStatus.contains("LATEST DETECTED DEADLOCK");
-                }
-            }
-        } catch (java.sql.SQLException e) {
-            if (e.getErrorCode() == 1142 || e.getErrorCode() == 1227) {
-                deadlockCheckDisabled = true;
-                logger.warn("Deadlock check disabled: Insufficient privileges");
-            } else {
-                logger.debug("Could not check for deadlocks");
-            }
-        } catch (Exception e) {
-            logger.debug("Could not check for deadlocks");
-        }
-        return false;
-    }
 
     private boolean hasSlowQueries(Connection connection) {
         try (PreparedStatement stmt = connection.prepareStatement(
