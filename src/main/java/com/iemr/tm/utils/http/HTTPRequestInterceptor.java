@@ -59,9 +59,14 @@ public class HTTPRequestInterceptor implements HandlerInterceptor {
 		else
 			authorization = preAuth;
 		if (authorization == null || authorization.isEmpty()) {
-	        logger.info("Authorization header is null or empty. Skipping HTTPRequestInterceptor.");
-	        return true; // Allow the request to proceed without validation
-	    }
+			String uri = request.getRequestURI().toLowerCase();
+			if (uri.endsWith("/health") || uri.endsWith("/version")) {
+				logger.debug("Public endpoint {}; skipping auth check", uri);
+				return true;
+			}
+			logger.info("Authorization header is null or empty for endpoint: {}", request.getRequestURI());
+			return false; // Reject unauthenticated requests to protected endpoints
+		}
 		if (!request.getMethod().equalsIgnoreCase("OPTIONS")) {
 			try {
 				String[] requestURIParts = request.getRequestURI().split("/");
