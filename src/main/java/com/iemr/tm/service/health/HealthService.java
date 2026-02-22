@@ -518,16 +518,21 @@ public class HealthService {
             ObjectName objectName = new ObjectName("com.zaxxer.hikari:type=Pool (*)");
             var mBeans = mBeanServer.queryMBeans(objectName, null);
             
+            if (mBeans.isEmpty()) {
+                logger.debug("Pool exhaustion check disabled: HikariCP metrics unavailable via JMX");
+                return false;
+            }
+            
             for (var mBean : mBeans) {
                 if (evaluatePoolMetrics(mBeanServer, mBean.getObjectName())) {
                     return true;
                 }
             }
+            return false;
         } catch (Exception e) {
             logger.debug("Could not access HikariCP pool metrics via JMX");
         }
         
-        logger.debug("Pool exhaustion check disabled: HikariCP metrics unavailable");
         return false;
     }
 
