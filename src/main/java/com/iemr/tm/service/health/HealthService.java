@@ -401,7 +401,6 @@ public class HealthService {
         } catch (ExecutionException ex) {
             future.cancel(true);
             if (ex.getCause() instanceof InterruptedException) {
-                Thread.currentThread().interrupt();
                 logger.debug("Advanced MySQL checks were interrupted");
             } else {
                 logger.debug("Advanced MySQL checks failed: {}", ex.getCause() != null ? ex.getCause().getMessage() : ex.getMessage());
