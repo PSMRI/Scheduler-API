@@ -58,6 +58,15 @@ public class HTTPRequestInterceptor implements HandlerInterceptor {
 			authorization=preAuth.replace("Bearer ", "");
 		else
 			authorization = preAuth;
+		if (authorization == null || authorization.isEmpty()) {
+			String uri = request.getRequestURI().toLowerCase();
+			if (uri.endsWith("/health") || uri.endsWith("/version")) {
+				logger.debug("Public endpoint {}; skipping auth check", uri);
+				return true;
+			}
+			logger.info("Authorization header is null or empty for endpoint: {}", request.getRequestURI());
+			return false; // Reject unauthenticated requests to protected endpoints
+		}
 		if (!request.getMethod().equalsIgnoreCase("OPTIONS")) {
 			try {
 				String[] requestURIParts = request.getRequestURI().split("/");
@@ -77,7 +86,6 @@ public class HTTPRequestInterceptor implements HandlerInterceptor {
 					break;
 				case "api-docs":
 					break;
-
 				case "error":
 					status = false;
 					break;
