@@ -18,7 +18,7 @@ This microservice is built on Java, Spring boot framework and MySQL DB.
 * Redis
 * MySQL Database
 * Maven
-* Node Js
+* Node.js
 
 ### Installation and setup
 
