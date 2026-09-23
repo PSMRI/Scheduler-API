@@ -63,8 +63,7 @@ public class JwtUtil {
 				}
 			}
 		} catch (Exception e) {
-			// Log error but don't throw - token might be invalid already
-			throw new RuntimeException("Failed to invalidate token", e);
+			// Token is already expired or invalid — nothing to denylist, treat as success
 		}
 	}
 

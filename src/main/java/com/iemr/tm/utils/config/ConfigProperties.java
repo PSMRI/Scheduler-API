@@ -99,7 +99,7 @@ public class ConfigProperties {
 
 	public static boolean getExtendExpiryTime() {
 		if (extendExpiryTime == null) {
-			extendExpiryTime = getBoolean("iemr.session.expiry.time");
+			extendExpiryTime = getBoolean("iemr.extend.expiry.time");
 		}
 		return extendExpiryTime;
 	}

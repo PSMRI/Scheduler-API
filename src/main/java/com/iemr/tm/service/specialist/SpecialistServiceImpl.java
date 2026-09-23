@@ -22,8 +22,11 @@
 package com.iemr.tm.service.specialist;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -35,6 +38,8 @@ import com.iemr.tm.utils.exception.TMException;
 
 @Service
 public class SpecialistServiceImpl implements SpecialistService {
+
+	final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
 	@Autowired
 	SpecializationRepo specializationRepo;
@@ -73,6 +78,10 @@ public class SpecialistServiceImpl implements SpecialistService {
 		List<Object[]> obj = specializationRepo.getAllSPecialistForProvider(providerservicemapID);
 		if (obj.size() > 0) {
 			for (Object[] action : obj) {
+				if (action.length < 7) {
+				logger.warn("Skipping malformed specialist row: {}", Arrays.toString(action));
+				continue;
+			}
 				specialistList.add(new Specialist(null, ((Number) action[0]).longValue(), (String) action[1],
 						(String) action[2], (String) action[3], ((Number) action[6]).longValue(), null, null, null,
 						null, (String) action[4]));
